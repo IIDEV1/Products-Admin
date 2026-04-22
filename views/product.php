@@ -14,14 +14,9 @@ if (!$product) {
     exit;
 }
 
-$lang = $_SESSION['lang'] ?? 'ru';
-$title_ru = $product['title_ru'] ?? $product['title'] ?? 'Без названия';
-$title_en = $product['title_en'] ?? '';
-$current_title = ($lang === 'en' && !empty($title_en)) ? $title_en : $title_ru;
-
-$desc_ru = $product['description_ru'] ?? $product['description'] ?? '';
-$desc_en = $product['description_en'] ?? '';
-$current_desc = ($lang === 'en' && !empty($desc_en)) ? $desc_en : $desc_ru;
+$lang = 'ru';
+$current_title = $product['title_ru'] ?? $product['title'] ?? 'Без названия';
+$current_desc = $product['description_ru'] ?? $product['description'] ?? 'Описание отсутствует';
 ?>
 
 <div class="max-w-6xl mx-auto py-20 px-6">
@@ -39,7 +34,7 @@ $current_desc = ($lang === 'en' && !empty($desc_en)) ? $desc_en : $desc_ru;
             <div class="mb-10">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="w-1 h-8 bg-orange-600"></div>
-                    <span class="text-[10px] text-zinc-500 font-black uppercase tracking-[0.5em]">Asset Specification</span>
+                    <span class="text-[10px] text-zinc-500 font-black uppercase tracking-[0.5em]"><?= __('asset_spec') ?></span>
                 </div>
                 <h1 class="text-5xl font-black text-white uppercase tracking-tighter leading-none mb-6"><?= htmlspecialchars($current_title) ?></h1>
                 <div class="inline-block bg-orange-600/10 border border-orange-600/20 px-6 py-2">
@@ -48,7 +43,7 @@ $current_desc = ($lang === 'en' && !empty($desc_en)) ? $desc_en : $desc_ru;
             </div>
 
             <div class="flex-grow">
-                <h4 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-4 border-b border-white/10 pb-2">Manifest Description</h4>
+                <h4 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-4 border-b border-white/10 pb-2"><?= __('manifest_desc') ?></h4>
                 <div class="text-zinc-300 text-sm leading-relaxed uppercase tracking-wide space-y-4">
                     <?= nl2br(htmlspecialchars($current_desc)) ?>
                 </div>
@@ -57,7 +52,7 @@ $current_desc = ($lang === 'en' && !empty($desc_en)) ? $desc_en : $desc_ru;
             <div class="mt-12">
                 <a href="actions/cart.php?action=add&id=<?= $product['id'] ?>" 
                    class="inline-block w-full bg-orange-600 text-white text-center py-6 text-xs font-black uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all shadow-[0_10px_30px_rgba(234,88,12,0.3)] hover:shadow-[0_15px_40px_rgba(234,88,12,0.5)]">
-                    Initiate Transfer to Bag
+                    <?= __('transfer_to_bag') ?>
                 </a>
             </div>
         </div>
@@ -67,11 +62,11 @@ $current_desc = ($lang === 'en' && !empty($desc_en)) ? $desc_en : $desc_ru;
     
     <div class="mt-12 flex items-center justify-between">
         <a href="?page=catalog" class="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-orange-500 transition-colors flex items-center gap-4 group">
-            <span class="group-hover:-translate-x-2 transition-transform">←</span> Return to Registry
+            <span class="group-hover:-translate-x-2 transition-transform">←</span> <?= __('return_to_registry') ?>
         </a>
         <div class="flex items-center gap-6 opacity-20">
             <div class="w-12 h-[1px] bg-white"></div>
-            <span class="text-[8px] font-black text-white uppercase tracking-[0.5em]">Sector: 07-B</span>
+            <span class="text-[8px] font-black text-white uppercase tracking-[0.5em]"><?= __('sector') ?>: 07-B</span>
         </div>
     </div>
 </div>

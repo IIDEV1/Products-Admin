@@ -1,7 +1,8 @@
 <?php
-// Инициализация системы перевода
-$current_lang = $_SESSION['lang'] ?? 'ru';
-$lang_file = __DIR__ . "/../languages/{$current_lang}.php";
+// Инициализация системы перевода (Принудительно RU)
+$_SESSION['lang'] = 'ru';
+$current_lang = 'ru';
+$lang_file = __DIR__ . "/../languages/ru.php";
 $trans = file_exists($lang_file) ? require $lang_file : [];
 
 if (!function_exists('__')) {
@@ -12,11 +13,11 @@ if (!function_exists('__')) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= $current_lang ?>">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orbital System</title>
+    <title>Орбитальная Система</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');

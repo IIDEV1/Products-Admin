@@ -75,7 +75,7 @@ $products = $stmt->fetchAll();
 
                 <div class="mt-auto flex items-end justify-between border-t border-white/5 pt-6">
                     <div class="flex flex-col">
-                        <span class="text-[9px] text-zinc-600 uppercase tracking-widest font-black mb-1">PRICE</span>
+                        <span class="text-[9px] text-zinc-600 uppercase tracking-widest font-black mb-1">ЦЕНА</span>
                         <span class="text-2xl font-black text-white tracking-tighter"><?= number_format($product['price'], 0, '.', ' ') ?> <span class="text-orange-600"><?= __('currency') ?></span></span>
                     </div>
                     <a href="actions/cart.php?action=add&id=<?= $product['id'] ?>" 

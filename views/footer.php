@@ -3,8 +3,8 @@
 <div id="cartModal" class="cart-modal fixed top-0 right-0 w-full max-w-lg h-full bg-[#0a0a0a] border-l border-orange-600/20 shadow-[0_0_50px_rgba(0,0,0,0.9)] z-50 flex flex-col">
     <div class="p-8 border-b border-white/5 flex justify-between items-center bg-black/40">
         <div class="flex flex-col">
-            <h2 class="text-2xl font-black text-white tracking-tighter uppercase">Inventory Buffer</h2>
-            <span class="text-[10px] text-orange-500 font-bold tracking-[0.4em] uppercase">Sector Cart</span>
+            <h2 class="text-2xl font-black text-white tracking-tighter uppercase">Буфер Инвентаря</h2>
+            <span class="text-[10px] text-orange-500 font-bold tracking-[0.4em] uppercase">Сектор Корзины</span>
         </div>
         <button id="closeCart" class="text-zinc-500 hover:text-orange-500 text-4xl transition-colors">&times;</button>
     </div>
@@ -15,22 +15,22 @@
     
     <div class="p-8 border-t border-white/5 bg-black/60 backdrop-blur-2xl">
         <div class="flex justify-between items-center mb-8 bg-orange-600/5 p-6 border border-orange-600/10">
-            <span class="text-xs font-black uppercase tracking-widest text-zinc-500">Total Valuation</span>
+            <span class="text-xs font-black uppercase tracking-widest text-zinc-500">Общая Оценка</span>
             <span id="cartTotal" class="text-3xl font-black text-white drop-shadow-[0_0_15px_rgba(234,88,12,0.4)]">0 ฿</span>
         </div>
         
         <form id="checkoutForm" class="space-y-4">
-            <input type="text" name="customer_name" placeholder="IDENTIFICATION NAME" required 
+            <input type="text" name="customer_name" placeholder="ИМЯ ИДЕНТИФИКАЦИИ" required 
                    class="w-full bg-black border border-white/10 text-white px-6 py-5 text-xs font-bold uppercase tracking-widest outline-none focus:border-orange-500 transition-all placeholder:text-zinc-800">
             
             <input type="tel" name="customer_phone" id="phoneInput" placeholder="+7 (999) 000-00-00" required maxlength="18"
                    class="w-full bg-black border border-white/10 text-white px-6 py-5 text-xs font-bold uppercase tracking-widest outline-none focus:border-orange-500 transition-all placeholder:text-zinc-800">
             
-            <input type="text" name="customer_address" placeholder="DELIVERY COORDINATES" required 
+            <input type="text" name="customer_address" placeholder="КООРДИНАТЫ ДОСТАВКИ" required 
                    class="w-full bg-black border border-white/10 text-white px-6 py-5 text-xs font-bold uppercase tracking-widest outline-none focus:border-orange-500 transition-all placeholder:text-zinc-800">
             
             <button type="submit" class="w-full bg-orange-600 text-white font-black uppercase tracking-[0.3em] text-[11px] py-6 hover:bg-orange-500 shadow-xl transition-all active:scale-[0.98]">
-                Execute Purchase Protocol
+                Выполнить Протокол Закупки
             </button>
         </form>
     </div>
