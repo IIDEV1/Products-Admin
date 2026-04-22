@@ -1,12 +1,14 @@
 <?php
-// Этот файл вызывается из api/index.php, сессия и конфиг уже есть.
+// Вызывается из api/index.php
 
+$action = $_GET['action'] ?? '';
+
+// --- 1. ЛОГИН ---
 if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $_POST['username'] ?? '';
     $pass = $_POST['password'] ?? '';
     
-    // Проверка логина и пароля (admin / 12345)
-    if ($user === ADMIN_USER && $pass === ADMIN_PASS) {
+    if ($user === 'admin' && $pass === '12345') {
         $_SESSION['admin_logged_in'] = true;
         setcookie('admin_access', 'active_session_verified', time() + 86400, '/', '', true, true);
         session_write_close();
@@ -19,6 +21,7 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+// --- 2. ЛОГАУТ ---
 if ($action === 'logout') {
     session_destroy();
     setcookie('admin_access', '', time() - 3600, '/');
@@ -26,39 +29,28 @@ if ($action === 'logout') {
     exit;
 }
 
-// Дальше защита: если не админ - выкидываем
-if (!$is_admin) {
+// Защита админки
+if (!isset($is_admin) || !$is_admin) {
     header('Location: /?page=admin_login');
     exit;
 }
 
-// Добавление товара
+// --- 3. ДОБАВЛЕНИЕ ТОВАРА ---
 if ($action === 'product_add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $t_ru = $_POST['title_ru'] ?? '';
-    $t_en = $_POST['title_en'] ?? '';
     $d_ru = $_POST['description_ru'] ?? '';
-    $d_en = $_POST['description_en'] ?? '';
-    $price = $_POST['price'] ?? 0;
-    $img_path = '';
+    $price = (float)($_POST['price'] ?? 0);
+    $img_url = $_POST['image_url'] ?? '';
 
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = __DIR__ . '/../public/uploads/';
-        if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
-        $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-        $filename = uniqid() . '.' . $ext;
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_dir . $filename)) {
-            $img_path = 'public/uploads/' . $filename;
-        }
-    }
-
-    $stmt = $pdo->prepare("INSERT INTO products (title_ru, title_en, description_ru, description_en, price, image_url) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$t_ru, $t_en, $d_ru, $d_en, $price, $img_path]);
+    $stmt = $pdo->prepare("INSERT INTO products (title_ru, description_ru, price, image_url) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$t_ru, $d_ru, $price, $img_url]);
+    
     session_write_close();
     header('Location: /?page=admin_products');
     exit;
 }
 
-// Удаление товара
+// --- 4. УДАЛЕНИЕ ТОВАРА ---
 if ($action === 'product_delete' && isset($_GET['id'])) {
     $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
     $stmt->execute([(int)$_GET['id']]);
@@ -67,18 +59,17 @@ if ($action === 'product_delete' && isset($_GET['id'])) {
     exit;
 }
 
-// Редактирование товара
+// --- 5. РЕДАКТИРОВАНИЕ ТОВАРА ---
 if ($action === 'product_edit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = (int)$_POST['id'];
-    $title_ru = $_POST['title_ru'] ?? '';
-    $title_en = $_POST['title_en'] ?? '';
-    $desc_ru = $_POST['description_ru'] ?? '';
-    $desc_en = $_POST['description_en'] ?? '';
-    $price = $_POST['price'] ?? 0;
-    $img = $_POST['image_url'] ?? '';
+    $t_ru = $_POST['title_ru'] ?? '';
+    $d_ru = $_POST['description_ru'] ?? '';
+    $price = (float)($_POST['price'] ?? 0);
+    $img_url = $_POST['image_url'] ?? '';
     
-    $stmt = $pdo->prepare("UPDATE products SET title_ru = ?, title_en = ?, description_ru = ?, description_en = ?, price = ?, image_url = ? WHERE id = ?");
-    $stmt->execute([$title_ru, $title_en, $desc_ru, $desc_en, $price, $img, $id]);
+    $stmt = $pdo->prepare("UPDATE products SET title_ru = ?, description_ru = ?, price = ?, image_url = ? WHERE id = ?");
+    $stmt->execute([$t_ru, $d_ru, $price, $img_url, $id]);
+    
     session_write_close();
     header('Location: /?page=admin_products');
     exit;

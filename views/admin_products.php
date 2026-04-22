@@ -1,94 +1,78 @@
 <?php
-$stmt = $pdo->query("SELECT * FROM products ORDER BY created_at DESC");
-$products = $stmt->fetchAll();
+$stmt = $pdo->query("SELECT * FROM products ORDER BY id DESC");
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
+
+<div class="mb-10 flex justify-between items-end">
     <div>
-        <h1 class="text-4xl font-extrabold tracking-tight text-slate-900 mb-2 uppercase"><?= __('asset_registry') ?></h1>
-        <p class="text-slate-500 font-medium uppercase text-xs tracking-[0.4em]"><?= __('system_backend') ?></p>
+        <h1 class="text-3xl font-black uppercase tracking-tighter text-slate-900">Управление <span class="text-indigo-600">Товарами</span></h1>
+        <p class="text-slate-500 text-sm mt-1">Добавление, редактирование и удаление товаров в каталоге.</p>
     </div>
-    <button onclick="document.getElementById('productForm').classList.toggle('hidden')" 
-            class="bg-indigo-600 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest rounded-2xl shadow-xl shadow-indigo-100 hover:bg-slate-900 transition-all active:scale-95">
-        <?= __('create_registry') ?>
-    </button>
 </div>
 
-<div id="productForm" class="hidden luxury-card rounded-3xl p-10 mb-16 max-w-4xl mx-auto border border-slate-200">
-    <h3 class="text-xs font-bold uppercase tracking-[0.4em] mb-12 text-center text-slate-400"><?= __('registry_module') ?></h3>
-    <form action="actions/admin.php?action=product_add" method="POST" enctype="multipart/form-data" class="space-y-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="space-y-2">
-                <label class="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1"><?= __('label_ru') ?></label>
-                <input type="text" name="title_ru" placeholder="Наименование (RU)" required 
-                       class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all">
-            </div>
-            <div class="space-y-2">
-                <label class="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1"><?= __('label_en') ?></label>
-                <input type="text" name="title_en" placeholder="Identification Label (EN)" 
-                       class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all">
-            </div>
-        </div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <div class="lg:col-span-1">
+        <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-indigo-50 sticky top-24">
+            <h2 class="text-sm font-black uppercase tracking-widest text-slate-800 mb-6 border-b border-slate-100 pb-4">Добавить новый товар</h2>
+            
+            <form action="/?action=product_add" method="POST" class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Название товара</label>
+                    <input type="text" name="title_ru" required class="w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 rounded-xl text-sm font-medium outline-none focus:border-indigo-600 transition-colors mt-1">
+                </div>
+                
+                <div>
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Описание</label>
+                    <textarea name="description_ru" rows="4" required class="w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 rounded-xl text-sm font-medium outline-none focus:border-indigo-600 transition-colors mt-1 resize-none"></textarea>
+                </div>
+                
+                <div>
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Цена ($)</label>
+                    <input type="number" name="price" step="0.01" required class="w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 rounded-xl text-sm font-medium outline-none focus:border-indigo-600 transition-colors mt-1">
+                </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="space-y-2">
-                <label class="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1"><?= __('desc_ru') ?></label>
-                <textarea name="description_ru" placeholder="Манифест (RU)" 
-                          class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all h-32"></textarea>
-            </div>
-            <div class="space-y-2">
-                <label class="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1"><?= __('desc_en') ?></label>
-                <textarea name="description_en" placeholder="Manifest (EN)" 
-                          class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all h-32"></textarea>
-            </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1 text-indigo-600">Ссылка на картинку (URL)</label>
+                    <input type="url" name="image_url" placeholder="https://..." required class="w-full bg-indigo-50 border border-indigo-200 text-slate-900 px-4 py-3 rounded-xl text-sm font-medium outline-none focus:border-indigo-600 transition-colors mt-1">
+                    <p class="text-[10px] text-slate-400 mt-1 ml-1 uppercase">Скопируйте URL картинки из интернета</p>
+                </div>
+                
+                <button type="submit" class="w-full bg-indigo-600 text-white font-black uppercase tracking-widest text-xs py-4 rounded-xl hover:bg-indigo-700 transition-colors shadow-md mt-4">
+                    Опубликовать товар
+                </button>
+            </form>
         </div>
+    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="space-y-2">
-                <label class="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1"><?= __('valuation') ?></label>
-                <input type="number" step="0.01" name="price" placeholder="0.00" required 
-                       class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all">
+    <div class="lg:col-span-2 space-y-4">
+        <?php if (empty($products)): ?>
+            <div class="bg-white border-2 border-dashed border-slate-200 rounded-2xl p-10 text-center">
+                <p class="text-slate-400 font-bold uppercase tracking-widest text-sm">Товаров пока нет</p>
             </div>
-            <div class="space-y-2">
-                <label class="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1"><?= __('attachment') ?></label>
-                <input type="file" name="image" accept="image/*" required
-                       class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-3.5 text-xs font-bold outline-none focus:ring-2 focus:ring-indigo-600/20 transition-all">
-            </div>
-        </div>
-        <button type="submit" class="w-full bg-indigo-600 text-white rounded-2xl py-5 text-xs font-bold uppercase tracking-[0.3em] shadow-xl shadow-indigo-100 transition-all hover:bg-slate-900 active:scale-[0.98]"><?= __('commit_registry') ?></button>
-    </form>
-</div>
-
-<div class="luxury-card rounded-3xl overflow-hidden bg-white shadow-sm border border-slate-200">
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-slate-50 border-b border-slate-200">
-                    <th class="px-8 py-6 text-[10px] uppercase tracking-widest font-extrabold text-slate-400"><?= __('col_ref') ?></th>
-                    <th class="px-8 py-6 text-[10px] uppercase tracking-widest font-extrabold text-slate-400"><?= __('col_media') ?></th>
-                    <th class="px-8 py-6 text-[10px] uppercase tracking-widest font-extrabold text-slate-400"><?= __('col_id') ?></th>
-                    <th class="px-8 py-6 text-[10px] uppercase tracking-widest font-extrabold text-slate-400"><?= __('col_val') ?></th>
-                    <th class="px-8 py-6 text-[10px] uppercase tracking-widest font-extrabold text-slate-400 text-right"><?= __('col_ctrl') ?></th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100">
-                <?php foreach ($products as $p): ?>
-                    <tr class="hover:bg-slate-50/50 transition-colors group">
-                        <td class="px-8 py-6 text-xs font-bold text-slate-400 tracking-tighter">#<?= $p['id'] ?></td>
-                        <td class="px-8 py-6">
-                            <div class="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
-                                <img src="<?= htmlspecialchars($p['image_url'] ?: 'https://via.placeholder.com/100') ?>" class="w-full h-full object-cover">
-                            </div>
-                        </td>
-                        <td class="px-8 py-6 text-sm font-bold text-slate-900 uppercase tracking-tight"><?= htmlspecialchars($p['title_ru']) ?></td>
-                        <td class="px-8 py-6 text-sm font-extrabold text-indigo-600"><?= number_format($p['price'], 0, '.', ' ') ?> ฿</td>
-                        <td class="px-8 py-6 text-right">
-                            <a href="actions/admin.php?action=product_delete&id=<?= $p['id'] ?>" 
-                               onclick="return confirm('<?= __('confirm_delete') ?>')"
-                               class="text-[10px] font-bold uppercase tracking-widest text-slate-300 hover:text-red-500 px-4 py-2 rounded-xl hover:bg-red-50 transition-all"><?= __('btn_delete') ?></a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <?php else: ?>
+            <?php foreach ($products as $product): ?>
+                <div class="bg-white border border-slate-200 rounded-2xl p-4 flex gap-6 items-center shadow-sm hover:shadow-md transition-shadow">
+                    <?php if (!empty($product['image_url'])): ?>
+                        <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="IMG" class="w-24 h-24 object-cover rounded-xl border border-slate-100">
+                    <?php else: ?>
+                        <div class="w-24 h-24 bg-slate-100 rounded-xl flex items-center justify-center border border-slate-200">
+                            <span class="text-xs font-bold text-slate-400 uppercase">NO IMG</span>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-900"><?= htmlspecialchars($product['title_ru'] ?? 'Без названия') ?></h3>
+                        <p class="text-xs text-slate-500 mt-1 line-clamp-2"><?= htmlspecialchars($product['description_ru'] ?? '') ?></p>
+                        <div class="text-indigo-600 font-black mt-2">$<?= number_format($product['price'] ?? 0, 2) ?></div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-2 border-l border-slate-100 pl-6">
+                        <a href="?action=product_delete&id=<?= $product['id'] ?>" onclick="return confirm('Удалить этот товар?')" class="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-xs font-bold uppercase hover:bg-red-100 transition-colors text-center">
+                            Удалить
+                        </a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </div>
