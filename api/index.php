@@ -3,6 +3,7 @@ session_start();
 
 if (isset($_GET['logout'])) {
     session_destroy();
+    setcookie('admin_access', '', time() - 3600, '/');
     header('Location: /');
     exit;
 }
@@ -10,7 +11,10 @@ if (isset($_GET['logout'])) {
 require_once __DIR__ . '/../config.php';
 
 $page = $_GET['page'] ?? 'catalog';
-$is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
+
+// Dual-layer Admin check (Session + persistent cookie)
+$is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
+            (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
 
 // Admin Guard
 if (str_starts_with($page, 'admin_') && $page !== 'admin_login' && !$is_admin) {

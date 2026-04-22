@@ -10,6 +10,8 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($user === ADMIN_USER && $pass === ADMIN_PASS) {
         $_SESSION['admin_logged_in'] = true;
+        // Fallback cookie for Serverless environments (24 hours)
+        setcookie('admin_access', 'active_session_verified', time() + 86400, '/', '', true, true);
         session_write_close();
         header('Location: /?page=admin_products');
     } else {
@@ -21,11 +23,15 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if ($action === 'logout') {
     session_destroy();
+    setcookie('admin_access', '', time() - 3600, '/');
     header('Location: /');
     exit;
 }
 
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+$is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
+            (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
+
+if (!$is_admin) {
     header('Location: /?page=admin_login');
     exit;
 }
