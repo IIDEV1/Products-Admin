@@ -54,7 +54,7 @@ $products = $stmt->fetchAll();
                        class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-3.5 text-xs font-bold outline-none focus:ring-2 focus:ring-indigo-600/20 transition-all">
             </div>
         </div>
-        <button type="submit" class="w-full bg-slate-900 text-white rounded-2xl py-5 text-xs font-bold uppercase tracking-[0.3em] shadow-xl shadow-slate-200 transition-all hover:bg-indigo-600 active:scale-[0.98]"><?= __('commit_registry') ?></button>
+        <button type="submit" class="w-full bg-indigo-600 text-white rounded-2xl py-5 text-xs font-bold uppercase tracking-[0.3em] shadow-xl shadow-indigo-100 transition-all hover:bg-slate-900 active:scale-[0.98]"><?= __('commit_registry') ?></button>
     </form>
 </div>
 

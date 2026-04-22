@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header('Location: /');
+    exit;
+}
+
 require_once __DIR__ . '/../config.php';
 
 $page = $_GET['page'] ?? 'catalog';

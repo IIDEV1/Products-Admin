@@ -19,8 +19,6 @@ try {
     die("Connection failed: " . $e->getMessage());
 }
 
-session_start();
-
 $lang = $_SESSION['lang'] ?? 'ru';
 $lang_file = __DIR__ . "/languages/{$lang}.php";
 $lang_data = file_exists($lang_file) ? require $lang_file : [];

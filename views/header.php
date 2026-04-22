@@ -91,11 +91,11 @@ if (!function_exists('__')) {
                 <a href="/?page=admin_orders" class="nav-link text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-indigo-600 transition-colors">
                     <?= __('nav_orders') ?>
                 </a>
-                <a href="actions/admin.php?action=logout" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors">
+                <a href="/?logout=1" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors border-l border-slate-200 pl-8">
                     <?= __('nav_exit') ?>
                 </a>
             <?php else: ?>
-                <a href="/?page=admin_login" class="nav-link text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-colors">ВХОД</a>
+                <a href="/?page=admin_login" class="nav-link text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-colors border-l border-slate-200 pl-8">ВХОД</a>
             <?php endif; ?>
 
             <a href="/?page=cart" class="flex items-center gap-2 bg-slate-900 text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-md relative group">
