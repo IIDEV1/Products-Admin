@@ -1,11 +1,12 @@
-<?php
-session_start();
+<?php 
+session_start(); 
+error_reporting(E_ALL); 
+ini_set('display_errors', 1);
 
-// 1. Force Define Admin Status immediately
+// FORCE_VERSION_5_LOGIC
 $is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
-            (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
+             (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
 
-// 2. Logout Handler
 if (isset($_GET['logout'])) {
     session_destroy();
     setcookie('admin_access', '', time() - 3600, '/');
@@ -17,7 +18,7 @@ require_once __DIR__ . '/../config.php';
 
 $page = $_GET['page'] ?? 'catalog';
 
-// 3. Admin Guard
+// Admin Guard
 if (str_starts_with($page, 'admin_') && $page !== 'admin_login' && !$is_admin) {
     header('Location: /?page=admin_login');
     exit;
