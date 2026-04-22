@@ -33,20 +33,21 @@ if ($action === 'get') {
 }
 
 if ($id > 0) {
+    $id_key = (string)$id;
     if ($action === 'add') {
-        if (isset($_SESSION['cart'][$id])) {
-            $_SESSION['cart'][$id]++;
+        if (isset($_SESSION['cart'][$id_key])) {
+            $_SESSION['cart'][$id_key]++;
         } else {
-            $_SESSION['cart'][$id] = 1;
+            $_SESSION['cart'][$id_key] = 1;
         }
     }
 
     if ($action === 'remove') {
-        if (isset($_SESSION['cart'][$id])) {
-            if ($_SESSION['cart'][$id] > 1) {
-                $_SESSION['cart'][$id]--;
+        if (isset($_SESSION['cart'][$id_key])) {
+            if ($_SESSION['cart'][$id_key] > 1) {
+                $_SESSION['cart'][$id_key]--;
             } else {
-                unset($_SESSION['cart'][$id]);
+                unset($_SESSION['cart'][$id_key]);
             }
         }
     }

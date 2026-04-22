@@ -1,5 +1,14 @@
 <?php 
-session_start(); 
+if (session_status() === PHP_SESSION_NONE) {
+    if (strpos(php_uname(), 'Linux') !== false || getenv('VERCEL')) {
+        session_save_path('/tmp');
+    }
+    session_start(); 
+}
+
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
 
 // 1. Сразу проверяем статус админа
 $is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
