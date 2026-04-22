@@ -42,8 +42,9 @@ if ($action === 'product_add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = (float)($_POST['price'] ?? 0);
     $img_url = $_POST['image_url'] ?? '';
 
-    $stmt = $pdo->prepare("INSERT INTO products (title_ru, description_ru, price, image_url) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$t_ru, $d_ru, $price, $img_url]);
+    // ВАЖНО: Добавили колонку 'name', передаем туда $t_ru
+    $stmt = $pdo->prepare("INSERT INTO products (name, title_ru, description_ru, price, image_url) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$t_ru, $t_ru, $d_ru, $price, $img_url]);
     
     session_write_close();
     header('Location: /?page=admin_products');
@@ -67,8 +68,9 @@ if ($action === 'product_edit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = (float)($_POST['price'] ?? 0);
     $img_url = $_POST['image_url'] ?? '';
     
-    $stmt = $pdo->prepare("UPDATE products SET title_ru = ?, description_ru = ?, price = ?, image_url = ? WHERE id = ?");
-    $stmt->execute([$t_ru, $d_ru, $price, $img_url, $id]);
+    // ВАЖНО: Обновляем и 'name' тоже
+    $stmt = $pdo->prepare("UPDATE products SET name = ?, title_ru = ?, description_ru = ?, price = ?, image_url = ? WHERE id = ?");
+    $stmt->execute([$t_ru, $t_ru, $d_ru, $price, $img_url, $id]);
     
     session_write_close();
     header('Location: /?page=admin_products');
