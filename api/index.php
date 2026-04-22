@@ -12,7 +12,13 @@ $page = $_GET['page'] ?? 'catalog';
 
 // 2. ПЕРЕХВАТ ДЕЙСТВИЙ ДЛЯ VERCEL (чтобы логин работал)
 if ($action !== '') {
-    require_once __DIR__ . '/../actions/admin.php';
+    if (in_array($action, ['add', 'remove', 'get'])) {
+        require_once __DIR__ . '/../actions/cart.php';
+    } elseif ($action === 'checkout') {
+        require_once __DIR__ . '/../actions/checkout.php';
+    } else {
+        require_once __DIR__ . '/../actions/admin.php';
+    }
     exit; 
 }
 

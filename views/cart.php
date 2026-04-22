@@ -53,9 +53,9 @@ if (!empty($cart)) {
                                 <div class="flex flex-col items-center sm:items-start">
                                     <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1"><?= __('quantity') ?></span>
                                     <div class="flex items-center gap-4 bg-slate-50 border border-slate-200 px-3 py-1 rounded-lg">
-                                        <a href="actions/cart.php?action=remove&id=<?= $p['id'] ?>" class="text-slate-400 hover:text-indigo-600 transition-colors font-black">-</a>
+                                        <a href="/?action=remove&id=<?= $p['id'] ?>" class="text-slate-400 hover:text-indigo-600 transition-colors font-black">-</a>
                                         <span class="text-slate-900 font-extrabold text-sm"><?= $qty ?></span>
-                                        <a href="actions/cart.php?action=add&id=<?= $p['id'] ?>" class="text-slate-400 hover:text-indigo-600 transition-colors font-black">+</a>
+                                        <a href="/?action=add&id=<?= $p['id'] ?>" class="text-slate-400 hover:text-indigo-600 transition-colors font-black">+</a>
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@ if (!empty($cart)) {
                         </div>
                     </div>
 
-                    <form action="actions/checkout.php" method="POST" class="space-y-4">
+                    <form action="/?action=checkout" method="POST" class="space-y-4">
                         <div class="space-y-1">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Имя получателя</label>
                             <input type="text" name="customer_name" placeholder="<?= __('consignee_id') ?>" required 

@@ -53,7 +53,7 @@ $products = $stmt->fetchAll();
                     <div class="flex flex-col">
                         <span class="text-lg font-extrabold text-slate-900 tracking-tight"><?= number_format($product['price'], 0, '.', ' ') ?> ฿</span>
                     </div>
-                    <a href="actions/cart.php?action=add&id=<?= $product['id'] ?>" 
+                    <a href="/?action=add&id=<?= $product['id'] ?>" 
                             class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-slate-900 transition-all active:scale-95 shadow-sm">
                         В КОРЗИНУ
                     </a>
