@@ -22,6 +22,11 @@ $products = $stmt->fetchAll();
 </div>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="productGrid">
+    <?php if (empty($products)): ?>
+        <div class="col-span-full py-20 text-center luxury-card rounded-3xl border-dashed bg-white">
+            <p class="text-slate-400 text-sm font-bold uppercase tracking-widest">Товаров пока нет</p>
+        </div>
+    <?php endif; ?>
     <?php foreach ($products as $i => $product): ?>
         <div class="luxury-card rounded-2xl flex flex-col bg-white overflow-hidden group border border-slate-200" 
              data-title="<?= strtolower(htmlspecialchars($product['title_ru'])) ?>" 
