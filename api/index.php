@@ -32,7 +32,11 @@ switch ($page) {
         require_once __DIR__ . '/../views/admin_login.php';
         break;
     case 'admin_products':
-        require_once __DIR__ . '/../views/admin_products.php';
+        if (file_exists(__DIR__ . '/../views/admin_products.php')) {
+            require_once __DIR__ . '/../views/admin_products.php';
+        } else {
+            require_once __DIR__ . '/../views/admin.php';
+        }
         break;
     case 'admin_orders':
         require_once __DIR__ . '/../views/admin_orders.php';
