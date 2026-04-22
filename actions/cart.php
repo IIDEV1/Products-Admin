@@ -53,6 +53,9 @@ if ($id > 0) {
     }
 }
 
+// Записываем куки на 30 дней для Vercel
+setcookie('cart_storage', json_encode($_SESSION['cart']), time() + 86400 * 30, '/');
+
 session_write_close();
 $referer = $_SERVER['HTTP_REFERER'] ?? '/?page=catalog';
 header("Location: $referer");

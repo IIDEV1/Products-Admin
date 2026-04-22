@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_SESSION['cart'])) {
         $stmt->execute([$name, $phone, $address, $total_price]);
 
         unset($_SESSION['cart']);
+        setcookie('cart_storage', '', time() - 3600, '/');
 
         session_write_close();
         header('Location: /?page=catalog&order=success');

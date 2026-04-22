@@ -6,6 +6,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start(); 
 }
 
+// Синхронизация корзины с COOKIE для Vercel
+if (empty($_SESSION['cart']) && !empty($_COOKIE['cart_storage'])) {
+    $_SESSION['cart'] = json_decode($_COOKIE['cart_storage'], true) ?: [];
+}
+
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
