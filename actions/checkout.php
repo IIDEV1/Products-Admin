@@ -1,5 +1,5 @@
 <?php
-require_once '../config.php';
+require_once __DIR__ . '/../config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_SESSION['cart'])) {
     $name = htmlspecialchars(trim($_POST['customer_name'] ?? ''));
