@@ -30,7 +30,7 @@ $is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']
             <!-- ADMIN AUTHORIZED ACCESS -->
             <a href="?page=admin_products" class="text-xs font-bold uppercase tracking-widest text-indigo-600 border-b-2 border-indigo-600">ТОВАРЫ</a>
             <a href="?page=admin_orders" class="text-xs font-bold uppercase tracking-widest text-indigo-600">ЗАКАЗЫ</a>
-            <a href="?logout=1" class="text-xs font-bold uppercase tracking-widest text-red-600 font-black ml-4">ВЫХОД [X]</a>
+            <a href="?action=logout" class="text-xs font-bold uppercase tracking-widest text-red-600 font-black ml-4">ВЫХОД [X]</a>
         <?php else: ?>
             <!-- GUEST ACCESS -->
             <a href="?page=admin_login" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-600 border-l border-slate-200 pl-8 transition-colors">ВХОД</a>

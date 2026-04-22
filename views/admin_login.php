@@ -10,7 +10,7 @@
             <p class="text-sm text-slate-500 mt-2 font-medium"><?= __('login_title') ?></p>
         </div>
         
-        <form action="actions/admin.php?action=login" method="POST" class="space-y-6">
+        <form action="/?action=login" method="POST" class="space-y-6">
             <div class="space-y-2">
                 <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1"><?= __('username') ?></label>
                 <input type="text" name="username" required 

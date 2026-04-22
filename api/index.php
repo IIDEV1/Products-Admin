@@ -1,27 +1,28 @@
 <?php 
 session_start(); 
 
-// 1. Capture Admin Status immediately
+// 1. Сразу проверяем статус админа
 $is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
-             (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
-
-if (isset($_GET['logout'])) {
-    session_destroy();
-    setcookie('admin_access', '', time() - 3600, '/');
-    header('Location: /');
-    exit;
-}
+            (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
 
 require_once __DIR__ . '/../config.php';
 
+$action = $_GET['action'] ?? '';
 $page = $_GET['page'] ?? 'catalog';
 
-// Admin Guard
+// 2. ПЕРЕХВАТ ДЕЙСТВИЙ ДЛЯ VERCEL (чтобы логин работал)
+if ($action !== '') {
+    require_once __DIR__ . '/../actions/admin.php';
+    exit; 
+}
+
+// 3. Защита админских страниц
 if (str_starts_with($page, 'admin_') && $page !== 'admin_login' && !$is_admin) {
     header('Location: /?page=admin_login');
     exit;
 }
 
+// Подключаем верстку
 require_once __DIR__ . '/../views/header.php';
 
 switch ($page) {
