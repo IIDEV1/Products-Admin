@@ -1,17 +1,8 @@
+<!-- VERSION 2.1-DEBUG -->
 <?php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 $is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
              (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
-
-// Инициализация перевода
-$lang_file = __DIR__ . "/../languages/ru.php";
-$trans = file_exists($lang_file) ? require $lang_file : [];
-if (!function_exists('__')) {
-    function __($key) {
-        global $trans;
-        return $trans[$key] ?? $key;
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -30,21 +21,31 @@ if (!function_exists('__')) {
 </head>
 <body class="antialiased bg-slate-50 text-slate-900">
 
+<?php if (isset($_GET['debug_auth'])): ?>
+    <div style="background:red; color:white; padding:10px; position:fixed; bottom:0; left:0; z-index:9999;">
+        Admin Status: <?= $is_admin ? 'TRUE' : 'FALSE' ?> | 
+        Sess: <?= isset($_SESSION['admin_logged_in']) ? 'YES' : 'NO' ?> | 
+        Cookie: <?= isset($_COOKIE['admin_access']) ? 'YES' : 'NO' ?>
+    </div>
+<?php endif; ?>
+
 <nav class="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
         <a href="/" class="text-xl font-extrabold tracking-tight flex items-center gap-2">
-            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-lg">O</div>
+            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-lg font-black italic">O</div>
             ORBITAL<span class="text-indigo-600 uppercase">System</span>
         </a>
 
         <div class="flex items-center gap-8">
             <a href="?page=catalog" class="text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-indigo-600 transition-colors">КАТАЛОГ</a>
 
-            <?php if ($is_admin): ?>
+            <?php if ($is_admin === true): ?>
+                <!-- ADMIN MENU VIEWABLE ONLY IF IS_ADMIN IS TRUE -->
                 <a href="?page=admin_products" class="text-xs font-bold uppercase tracking-widest text-indigo-600 border-b-2 border-indigo-600">ТОВАРЫ</a>
                 <a href="?page=admin_orders" class="text-xs font-bold uppercase tracking-widest text-indigo-600">ЗАКАЗЫ</a>
                 <a href="?logout=1" class="text-xs font-bold uppercase tracking-widest text-red-500 font-black ml-4">ВЫХОД [X]</a>
             <?php else: ?>
+                <!-- GUEST MENU -->
                 <a href="?page=admin_login" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-600 border-l border-slate-200 pl-8">ВХОД</a>
             <?php endif; ?>
 
