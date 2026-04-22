@@ -1,20 +1,17 @@
 <?php
-// Translation Initialization (Force RU)
-$_SESSION['lang'] = 'ru';
-$current_lang = 'ru';
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
+$is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
+             (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
+
+// Инициализация перевода
 $lang_file = __DIR__ . "/../languages/ru.php";
 $trans = file_exists($lang_file) ? require $lang_file : [];
-
 if (!function_exists('__')) {
     function __($key) {
         global $trans;
         return $trans[$key] ?? $key;
     }
 }
-
-// Ensure $is_admin is available in the header
-$is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
-            (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -28,45 +25,34 @@ $is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']
         body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #0F172A; min-height: 100vh; }
         .luxury-card { background: white; border: 1px solid #E2E8F0; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); transition: all 0.3s ease; }
         .luxury-card:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
-        .btn-indigo { background-color: #4F46E5; color: white; transition: all 0.2s ease; }
-        .btn-indigo:hover { background-color: #4338CA; transform: translateY(-1px); }
         ::selection { background: #4F46E5; color: #ffffff; }
-        .nav-link { position: relative; }
-        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #4F46E5; transition: width 0.3s ease; }
-        .nav-link:hover::after { width: 100%; }
     </style>
 </head>
-<body class="antialiased text-slate-900 bg-slate-50">
+<body class="antialiased bg-slate-50 text-slate-900">
+
 <nav class="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
         <a href="/" class="text-xl font-extrabold tracking-tight flex items-center gap-2">
             <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-lg">O</div>
-            ORBITAL<span class="text-indigo-600">SYSTEM</span>
+            ORBITAL<span class="text-indigo-600 uppercase">System</span>
         </a>
-        <div class="flex items-center space-x-8">
-            <a href="/?page=catalog" class="nav-link text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-indigo-600 transition-colors">
-                <?= __('nav_catalog') ?>
-            </a>
-            
+
+        <div class="flex items-center gap-8">
+            <a href="?page=catalog" class="text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-indigo-600 transition-colors">КАТАЛОГ</a>
+
             <?php if ($is_admin): ?>
-                <a href="/?page=admin_products" class="nav-link text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-indigo-600 transition-colors">
-                    ТОВАРЫ
-                </a>
-                <a href="/?page=admin_orders" class="nav-link text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-indigo-600 transition-colors">
-                    ЗАКАЗЫ
-                </a>
-                <a href="/?logout=1" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors border-l border-slate-200 pl-8">
-                    ВЫХОД
-                </a>
+                <a href="?page=admin_products" class="text-xs font-bold uppercase tracking-widest text-indigo-600 border-b-2 border-indigo-600">ТОВАРЫ</a>
+                <a href="?page=admin_orders" class="text-xs font-bold uppercase tracking-widest text-indigo-600">ЗАКАЗЫ</a>
+                <a href="?logout=1" class="text-xs font-bold uppercase tracking-widest text-red-500 font-black ml-4">ВЫХОД [X]</a>
             <?php else: ?>
-                <a href="/?page=admin_login" class="nav-link text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-colors border-l border-slate-200 pl-8">ВХОД</a>
+                <a href="?page=admin_login" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-600 border-l border-slate-200 pl-8">ВХОД</a>
             <?php endif; ?>
 
-            <a href="/?page=cart" class="flex items-center gap-2 bg-slate-900 text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-md relative group">
-                <?= __('nav_cart') ?>
-                <span id="cartCount" class="bg-indigo-600 text-white text-[10px] w-5 h-5 flex items-center justify-center font-bold rounded-full group-hover:scale-110 transition-transform"><?= array_sum($_SESSION['cart'] ?? []) ?></span>
+            <a href="?page=cart" class="bg-slate-900 text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all">
+                КОРЗИНА (<?= array_sum($_SESSION['cart'] ?? []) ?>)
             </a>
         </div>
     </div>
 </nav>
+
 <main class="container mx-auto px-6 pt-12 pb-24">
