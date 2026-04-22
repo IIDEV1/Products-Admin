@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/../config.php';
 
 $action = $_GET['action'] ?? '';
@@ -9,8 +10,10 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($user === ADMIN_USER && $pass === ADMIN_PASS) {
         $_SESSION['admin_logged_in'] = true;
+        session_write_close();
         header('Location: /?page=admin_products');
     } else {
+        session_write_close();
         header('Location: /?page=admin_login&error=1');
     }
     exit;
@@ -22,7 +25,7 @@ if ($action === 'logout') {
     exit;
 }
 
-if (!isset($_SESSION['admin_logged_in'])) {
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header('Location: /?page=admin_login');
     exit;
 }
@@ -47,6 +50,7 @@ if ($action === 'product_add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt = $pdo->prepare("INSERT INTO products (title_ru, title_en, description_ru, description_en, price, image_url) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->execute([$t_ru, $t_en, $d_ru, $d_en, $price, $img_path]);
+    session_write_close();
     header('Location: /?page=admin_products');
     exit;
 }
@@ -54,6 +58,7 @@ if ($action === 'product_add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($action === 'product_delete' && isset($_GET['id'])) {
     $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
     $stmt->execute([(int)$_GET['id']]);
+    session_write_close();
     header('Location: /?page=admin_products');
 }
 
@@ -68,5 +73,6 @@ if ($action === 'product_edit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $stmt = $pdo->prepare("UPDATE products SET title_ru = ?, title_en = ?, description_ru = ?, description_en = ?, price = ?, image_url = ? WHERE id = ?");
     $stmt->execute([$title_ru, $title_en, $desc_ru, $desc_en, $price, $img, $id]);
+    session_write_close();
     header('Location: /?page=admin_products');
 }
