@@ -1,7 +1,7 @@
 <?php
 $id = (int)($_GET['id'] ?? 0);
 if ($id <= 0) {
-    header('Location: ?page=catalog');
+    header('Location: /?page=catalog');
     exit;
 }
 
@@ -10,63 +10,58 @@ $stmt->execute([$id]);
 $product = $stmt->fetch();
 
 if (!$product) {
-    header('Location: ?page=catalog');
+    header('Location: /?page=catalog');
     exit;
 }
 
-$lang = 'ru';
 $current_title = $product['title_ru'] ?? $product['title'] ?? 'Без названия';
 $current_desc = $product['description_ru'] ?? $product['description'] ?? 'Описание отсутствует';
 ?>
 
-<div class="max-w-6xl mx-auto py-20 px-6">
-    <div class="flex flex-col lg:flex-row gap-16 bg-[#1a1a1a] border border-white/20 p-12 shadow-2xl relative overflow-hidden group">
-        <div class="lg:w-1/2">
-            <div class="aspect-square bg-black border border-white/10 overflow-hidden relative">
-                <img src="<?= htmlspecialchars($product['image_url'] ?: 'https://via.placeholder.com/800') ?>" 
-                     alt="<?= htmlspecialchars($current_title) ?>" 
-                     class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-40"></div>
-            </div>
+<div class="max-w-6xl mx-auto">
+    <div class="luxury-card rounded-3xl overflow-hidden flex flex-col md:flex-row bg-white">
+        <div class="md:w-1/2 aspect-square bg-slate-50">
+            <img src="<?= htmlspecialchars($product['image_url'] ?: 'https://via.placeholder.com/800') ?>" 
+                 alt="<?= htmlspecialchars($current_title) ?>" 
+                 class="w-full h-full object-cover">
         </div>
 
-        <div class="lg:w-1/2 flex flex-col">
+        <div class="md:w-1/2 p-12 flex flex-col">
             <div class="mb-10">
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="w-1 h-8 bg-orange-600"></div>
-                    <span class="text-[10px] text-zinc-500 font-black uppercase tracking-[0.5em]"><?= __('asset_spec') ?></span>
+                    <div class="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
+                    <span class="text-[10px] text-slate-400 font-extrabold uppercase tracking-[0.4em]"><?= __('asset_spec') ?></span>
                 </div>
-                <h1 class="text-5xl font-black text-white uppercase tracking-tighter leading-none mb-6"><?= htmlspecialchars($current_title) ?></h1>
-                <div class="inline-block bg-orange-600/10 border border-orange-600/20 px-6 py-2">
-                    <span class="text-3xl font-black text-orange-500 tracking-tighter"><?= number_format($product['price'], 0, '.', ' ') ?> <span class="text-white italic">฿</span></span>
+                <h1 class="text-4xl font-extrabold text-slate-900 uppercase tracking-tight leading-tight mb-6"><?= htmlspecialchars($current_title) ?></h1>
+                <div class="inline-flex items-baseline gap-2">
+                    <span class="text-4xl font-extrabold text-indigo-600 tracking-tighter"><?= number_format($product['price'], 0, '.', ' ') ?></span>
+                    <span class="text-lg font-bold text-slate-400 uppercase tracking-widest italic">฿</span>
                 </div>
             </div>
 
             <div class="flex-grow">
-                <h4 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-4 border-b border-white/10 pb-2"><?= __('manifest_desc') ?></h4>
-                <div class="text-zinc-300 text-sm leading-relaxed uppercase tracking-wide space-y-4">
+                <h4 class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-4 border-b border-slate-100 pb-2"><?= __('manifest_desc') ?></h4>
+                <div class="text-slate-600 text-sm leading-relaxed font-medium">
                     <?= nl2br(htmlspecialchars($current_desc)) ?>
                 </div>
             </div>
 
             <div class="mt-12">
                 <a href="actions/cart.php?action=add&id=<?= $product['id'] ?>" 
-                   class="inline-block w-full bg-orange-600 text-white text-center py-6 text-xs font-black uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all shadow-[0_10px_30px_rgba(234,88,12,0.3)] hover:shadow-[0_15px_40px_rgba(234,88,12,0.5)]">
+                   class="btn-luxury w-full flex items-center justify-center gap-4 py-5 rounded-2xl text-xs font-bold uppercase tracking-widest shadow-xl shadow-slate-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
                     <?= __('transfer_to_bag') ?>
                 </a>
             </div>
         </div>
-        
-        <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-orange-600/5 blur-[100px] rounded-full pointer-events-none"></div>
     </div>
     
     <div class="mt-12 flex items-center justify-between">
-        <a href="?page=catalog" class="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-orange-500 transition-colors flex items-center gap-4 group">
-            <span class="group-hover:-translate-x-2 transition-transform">←</span> <?= __('return_to_registry') ?>
+        <a href="/?page=catalog" class="text-xs font-bold text-slate-400 hover:text-indigo-600 transition-colors flex items-center gap-3">
+            <span>←</span> <?= __('return_to_registry') ?>
         </a>
-        <div class="flex items-center gap-6 opacity-20">
-            <div class="w-12 h-[1px] bg-white"></div>
-            <span class="text-[8px] font-black text-white uppercase tracking-[0.5em]"><?= __('sector') ?>: 07-B</span>
-        </div>
+        <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest"><?= __('sector') ?>: 07-B</span>
     </div>
 </div>

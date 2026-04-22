@@ -9,21 +9,21 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($user === ADMIN_USER && $pass === ADMIN_PASS) {
         $_SESSION['admin_logged_in'] = true;
-        header('Location: ../?page=admin_products');
+        header('Location: /?page=admin_products');
     } else {
-        header('Location: ../?page=admin_login&error=1');
+        header('Location: /?page=admin_login&error=1');
     }
     exit;
 }
 
 if ($action === 'logout') {
     session_destroy();
-    header('Location: ../index.php');
+    header('Location: /');
     exit;
 }
 
 if (!isset($_SESSION['admin_logged_in'])) {
-    header('Location: ../?page=admin_login');
+    header('Location: /?page=admin_login');
     exit;
 }
 
@@ -36,7 +36,7 @@ if ($action === 'product_add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $img_path = '';
 
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = '../public/uploads/';
+        $upload_dir = __DIR__ . '/../public/uploads/';
         if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
         $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
         $filename = uniqid() . '.' . $ext;
@@ -47,14 +47,14 @@ if ($action === 'product_add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt = $pdo->prepare("INSERT INTO products (title_ru, title_en, description_ru, description_en, price, image_url) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->execute([$t_ru, $t_en, $d_ru, $d_en, $price, $img_path]);
-    header('Location: ../?page=admin_products');
+    header('Location: /?page=admin_products');
     exit;
 }
 
 if ($action === 'product_delete' && isset($_GET['id'])) {
     $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
     $stmt->execute([(int)$_GET['id']]);
-    header('Location: ../?page=admin_products');
+    header('Location: /?page=admin_products');
 }
 
 if ($action === 'product_edit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -68,5 +68,5 @@ if ($action === 'product_edit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $stmt = $pdo->prepare("UPDATE products SET title_ru = ?, title_en = ?, description_ru = ?, description_en = ?, price = ?, image_url = ? WHERE id = ?");
     $stmt->execute([$title_ru, $title_en, $desc_ru, $desc_en, $price, $img, $id]);
-    header('Location: ../?page=admin_products');
+    header('Location: /?page=admin_products');
 }

@@ -10,146 +10,102 @@ if (!empty($cart)) {
     $stmt->execute($ids);
     $cartProducts = $stmt->fetchAll();
 }
-
-$lang = 'ru';
 ?>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="mb-12 border-b border-white/20 pb-8 flex justify-between items-end">
+<div class="max-w-7xl mx-auto">
+    <div class="mb-16 border-b border-slate-200 pb-10 flex justify-between items-end">
         <div>
-            <h1 class="text-5xl font-black text-white tracking-tighter uppercase leading-none"><?= __('inventory') ?></h1>
-            <p class="text-[10px] text-orange-500 font-black tracking-[0.6em] uppercase mt-4"><?= __('sector_cart_registry') ?></p>
-        </div>
-        <div class="hidden md:block text-right">
-            <span class="text-zinc-400 text-[10px] uppercase font-bold tracking-[0.3em] block mb-2"><?= __('active_buffer') ?></span>
-            <div class="h-1 w-32 bg-orange-600/30 ml-auto">
-                <div class="h-full bg-orange-600 w-2/3 animate-pulse"></div>
-            </div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight uppercase"><?= __('inventory') ?></h1>
+            <p class="text-[10px] text-indigo-600 font-extrabold tracking-[0.5em] uppercase mt-4"><?= __('sector_cart_registry') ?></p>
         </div>
     </div>
 
     <?php if (empty($cartProducts)): ?>
-        <div class="bg-[#18181b] border-2 border-dashed border-white/10 p-24 text-center rounded-sm shadow-2xl">
-            <div class="mb-8 flex justify-center">
-                <div class="w-16 h-16 border-2 border-orange-600/20 rounded-full flex items-center justify-center animate-pulse">
-                    <div class="w-8 h-8 border-2 border-orange-600 rounded-full"></div>
-                </div>
+        <div class="luxury-card rounded-3xl p-32 text-center border-dashed">
+            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
             </div>
-            <p class="text-white text-xl font-black uppercase tracking-[0.4em] mb-6"><?= __('database_empty') ?></p>
-            <p class="text-zinc-400 text-sm mb-10 max-w-md mx-auto uppercase tracking-widest font-bold"><?= __('no_assets') ?></p>
-            <a href="?page=catalog" class="inline-block bg-orange-600 text-white px-12 py-5 text-xs font-black uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all shadow-xl"><?= __('return_to_catalog') ?></a>
+            <p class="text-slate-900 text-xl font-bold uppercase tracking-widest mb-4"><?= __('database_empty') ?></p>
+            <p class="text-slate-400 text-sm mb-10"><?= __('no_assets') ?></p>
+            <a href="/?page=catalog" class="btn-indigo px-10 py-4 rounded-xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-indigo-100 inline-block"><?= __('return_to_catalog') ?></a>
         </div>
     <?php else: ?>
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-10">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-12">
             <div class="xl:col-span-2 space-y-6">
                 <?php foreach ($cartProducts as $p):
                     $qty = $cart[$p['id']] ?? 0;
                     $itemTotal = $p['price'] * $qty;
                     $subtotal += $itemTotal;
-
                     $display_title = $p['title_ru'] ?? $p['title'] ?? 'Без названия';
                 ?>
-                    <div class="bg-[#18181b] border border-white/20 p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-8 shadow-2xl hover:border-orange-500/50 transition-all group relative overflow-hidden">
-                        <div class="w-32 h-32 bg-black border border-white/10 shrink-0 overflow-hidden relative">
-                            <img src="<?= htmlspecialchars($p['image_url'] ?: 'https://via.placeholder.com/300') ?>" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700">
-                            <div class="absolute inset-0 border border-orange-600/0 group-hover:border-orange-600/20 transition-all"></div>
+                    <div class="luxury-card rounded-2xl p-6 flex items-center gap-8 bg-white">
+                        <div class="w-24 h-24 rounded-xl overflow-hidden bg-slate-50 shrink-0 border border-slate-100">
+                            <img src="<?= htmlspecialchars($p['image_url'] ?: 'https://via.placeholder.com/300') ?>" class="w-full h-full object-cover">
                         </div>
 
-                        <div class="flex-grow text-center sm:text-left">
-                            <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
-                                <h3 class="text-xl font-black text-white uppercase tracking-tight group-hover:text-orange-500 transition-colors"><?= htmlspecialchars($display_title) ?></h3>
-                                <span class="bg-orange-600/10 text-orange-500 text-[9px] font-black px-3 py-1 border border-orange-600/20 tracking-widest uppercase rounded-sm self-center sm:self-auto">Unit ID: #<?= $p['id'] ?></span>
-                            </div>
-
-                            <div class="flex flex-wrap justify-center sm:justify-start items-center gap-8">
+                        <div class="flex-grow">
+                            <h3 class="text-lg font-bold text-slate-900 mb-4 tracking-tight uppercase"><?= htmlspecialchars($display_title) ?></h3>
+                            <div class="flex items-center gap-10">
                                 <div class="flex flex-col">
-                                    <span class="text-[9px] text-zinc-400 font-bold uppercase tracking-widest mb-1"><?= __('valuation') ?></span>
-                                    <span class="text-white font-black text-lg"><?= number_format($p['price'], 0, '.', ' ') ?> <span class="text-orange-600 italic">฿</span></span>
+                                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-1"><?= __('valuation') ?></span>
+                                    <span class="text-slate-900 font-extrabold text-lg"><?= number_format($p['price'], 0, '.', ' ') ?> ฿</span>
                                 </div>
-                                <div class="w-[1px] h-8 bg-white/10 hidden sm:block"></div>
                                 <div class="flex flex-col">
-                                    <span class="text-[9px] text-zinc-400 font-bold uppercase tracking-widest mb-1"><?= __('quantity') ?></span>
-                                    <div class="flex items-center gap-4 bg-black/40 border border-white/10 px-4 py-1 rounded-sm">
-                                        <a href="actions/cart.php?action=remove&id=<?= $p['id'] ?>" class="text-zinc-500 hover:text-orange-500 transition-colors font-bold">-</a>
-                                        <span class="text-white font-black"><?= $qty ?></span>
-                                        <a href="actions/cart.php?action=add&id=<?= $p['id'] ?>" class="text-zinc-500 hover:text-orange-500 transition-colors font-bold">+</a>
+                                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-1"><?= __('quantity') ?></span>
+                                    <div class="flex items-center gap-4 bg-slate-50 border border-slate-200 px-3 py-1 rounded-lg">
+                                        <a href="actions/cart.php?action=remove&id=<?= $p['id'] ?>" class="text-slate-400 hover:text-indigo-600 transition-colors font-black">-</a>
+                                        <span class="text-slate-900 font-extrabold text-sm"><?= $qty ?></span>
+                                        <a href="actions/cart.php?action=add&id=<?= $p['id'] ?>" class="text-slate-400 hover:text-indigo-600 transition-colors font-black">+</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center w-full sm:w-auto gap-6 border-t sm:border-t-0 border-white/10 pt-6 sm:pt-0">
-                            <div class="text-right">
-                                <span class="text-[9px] text-zinc-400 font-bold uppercase tracking-widest block mb-1"><?= __('total_sector_value') ?></span>
-                                <span class="text-2xl font-black text-white tracking-tighter"><?= number_format($itemTotal, 0, '.', ' ') ?> <span class="text-orange-600">฿</span></span>
-                            </div>
-                            <a href="actions/cart.php?action=remove&id=<?= $p['id'] ?>" class="bg-[#27272a] hover:bg-red-600/20 border border-white/10 hover:border-red-500/50 text-zinc-300 hover:text-red-500 w-12 h-12 flex items-center justify-center transition-all shadow-xl group/del">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover/del:rotate-90 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </a>
+                        <div class="text-right pr-4">
+                            <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest block mb-1"><?= __('total_sector_value') ?></span>
+                            <span class="text-xl font-extrabold text-slate-900"><?= number_format($itemTotal, 0, '.', ' ') ?> ฿</span>
                         </div>
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-orange-600/5 blur-3xl rounded-full -mr-12 -mt-12 group-hover:bg-orange-600/20 transition-all"></div>
                     </div>
                 <?php endforeach; ?>
             </div>
 
             <div class="xl:col-span-1">
-                <div class="bg-[#18181b] border-2 border-orange-500/30 p-8 sm:p-10 shadow-2xl relative overflow-hidden sticky top-32">
-                    <div class="relative z-10">
-                        <div class="flex items-center gap-3 mb-10">
-                            <div class="w-2 h-8 bg-orange-600"></div>
-                            <h4 class="text-xs font-black text-white uppercase tracking-[0.4em]"><?= __('checkout_protocol') ?></h4>
+                <div class="luxury-card rounded-3xl p-10 bg-white sticky top-32">
+                    <h4 class="text-xs font-extrabold text-slate-900 uppercase tracking-[0.3em] mb-10 border-b border-slate-100 pb-5"><?= __('checkout_protocol') ?></h4>
+
+                    <div class="space-y-4 mb-10">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest"><?= __('asset_valuation') ?></span>
+                            <span class="text-slate-900 font-bold"><?= number_format($subtotal, 0, '.', ' ') ?> ฿</span>
                         </div>
-
-                        <div class="bg-black/40 border border-white/10 p-6 mb-10">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="text-zinc-400 text-[10px] font-bold uppercase tracking-widest"><?= __('asset_valuation') ?></span>
-                                <span class="text-zinc-200 font-bold tracking-widest"><?= number_format($subtotal, 0, '.', ' ') ?> ฿</span>
-                            </div>
-                            <div class="flex justify-between items-center mb-6">
-                                <span class="text-zinc-400 text-[10px] font-bold uppercase tracking-widest"><?= __('logistics') ?></span>
-                                <span class="text-orange-500 text-[10px] font-black tracking-widest uppercase italic"><?= __('free_delivery') ?></span>
-                            </div>
-                            <div class="h-[1px] bg-white/10 mb-6"></div>
-                            <div class="flex justify-between items-end">
-                                <span class="text-zinc-300 text-xs font-black uppercase tracking-[0.2em]"><?= __('total_manifest_value') ?></span>
-                                <span class="text-4xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_rgba(234,88,12,0.3)]"><?= number_format($subtotal, 0, '.', ' ') ?> <span class="text-orange-600">฿</span></span>
-                            </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest"><?= __('logistics') ?></span>
+                            <span class="text-indigo-600 text-[10px] font-extrabold tracking-widest uppercase italic"><?= __('free_delivery') ?></span>
                         </div>
-
-                        <form action="actions/checkout.php" method="POST" class="space-y-6">
-                            <div class="space-y-2">
-                                <label class="text-[9px] font-black text-zinc-400 uppercase tracking-widest ml-1"><?= __('consignee_id') ?></label>
-                                <input type="text" name="customer_name" placeholder="ВВЕДИТЕ ПОЛНОЕ ИМЯ" required 
-                                       class="w-full bg-black border border-white/20 text-white px-6 py-5 text-xs font-bold uppercase tracking-[0.2em] outline-none focus:border-orange-600 transition-all placeholder:text-zinc-700">
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="text-[9px] font-black text-zinc-400 uppercase tracking-widest ml-1"><?= __('secure_comms') ?></label>
-                                <input type="tel" name="customer_phone" placeholder="+7 (___) ___-__-__" required 
-                                       class="w-full bg-black border border-white/20 text-white px-6 py-5 text-xs font-bold uppercase tracking-[0.2em] outline-none focus:border-orange-600 transition-all placeholder:text-zinc-700">
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="text-[9px] font-black text-zinc-400 uppercase tracking-widest ml-1"><?= __('deployment_coords') ?></label>
-                                <textarea name="customer_address" placeholder="СЕКТОР НАЗНАЧЕНИЯ / УЛИЦА / КВАРТИРА" required rows="3"
-                                          class="w-full bg-black border border-white/20 text-white px-6 py-5 text-xs font-bold uppercase tracking-[0.2em] outline-none focus:border-orange-600 transition-all placeholder:text-zinc-700 resize-none"></textarea>
-                            </div>
-
-                            <button type="submit" 
-                                    class="w-full bg-gradient-to-br from-orange-600 to-orange-800 text-white font-black uppercase tracking-[0.4em] text-[11px] py-7 shadow-[0_10px_30px_rgba(234,88,12,0.3)] hover:shadow-[0_15px_40px_rgba(234,88,12,0.5)] hover:-translate-y-1 transition-all active:scale-[0.98] border border-orange-500/30">
-                                <?= __('initiate_transaction') ?>
-                            </button>
-                        </form>
-
-                        <div class="mt-8 pt-8 border-t border-white/5 flex items-center justify-center gap-6 opacity-30">
-                             <div class="h-4 w-auto grayscale brightness-200 opacity-50"><img src="https://via.placeholder.com/60x20?text=VISA" alt="visa"></div>
-                             <div class="h-4 w-auto grayscale brightness-200 opacity-50"><img src="https://via.placeholder.com/60x20?text=MASTERCARD" alt="mc"></div>
-                             <div class="h-4 w-auto grayscale brightness-200 opacity-50"><img src="https://via.placeholder.com/60x20?text=CRYPTO" alt="crypto"></div>
+                        <div class="h-px bg-slate-100 my-6"></div>
+                        <div class="flex justify-between items-end">
+                            <span class="text-slate-900 text-xs font-extrabold uppercase tracking-tight"><?= __('total_manifest_value') ?></span>
+                            <span class="text-3xl font-extrabold text-indigo-600 tracking-tighter"><?= number_format($subtotal, 0, '.', ' ') ?> ฿</span>
                         </div>
                     </div>
-                    <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-orange-600/5 blur-[100px] rounded-full"></div>
+
+                    <form action="actions/checkout.php" method="POST" class="space-y-5">
+                        <input type="text" name="customer_name" placeholder="<?= __('consignee_id') ?>" required 
+                               class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-xs font-semibold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                        
+                        <input type="tel" name="customer_phone" placeholder="<?= __('secure_comms') ?>" required 
+                               class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-xs font-semibold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                        
+                        <textarea name="customer_address" placeholder="<?= __('deployment_coords') ?>" required rows="3"
+                                  class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-xs font-semibold outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none"></textarea>
+
+                        <button type="submit" 
+                                class="w-full btn-indigo py-5 rounded-2xl text-[11px] font-bold uppercase tracking-widest shadow-xl shadow-indigo-100 mt-4">
+                            <?= __('initiate_transaction') ?>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

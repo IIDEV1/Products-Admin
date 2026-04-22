@@ -3,84 +3,61 @@ $stmt = $pdo->query("SELECT * FROM products ORDER BY created_at DESC");
 $products = $stmt->fetchAll();
 ?>
 
-<div class="orb orb-white w-[500px] h-[500px] top-40 left-[-100px] animate-orbital"></div>
-<div class="orb orb-orange w-[600px] h-[600px] top-[800px] right-[-200px] animate-orbital-slow" style="animation-delay: -20s"></div>
-<div class="orb orb-white w-[400px] h-[400px] top-[1500px] left-[200px] animate-orbital" style="animation-delay: -45s"></div>
-<div class="orb orb-orange w-[700px] h-[700px] top-[2200px] right-[100px] animate-orbital-slow" style="animation-delay: -10s"></div>
-<div class="orb orb-white w-[500px] h-[500px] top-[3000px] left-[-200px] animate-orbital" style="animation-delay: -70s"></div>
-<div class="orb orb-orange w-[450px] h-[450px] top-[3800px] right-[300px] animate-orbital-slow" style="animation-delay: -35s"></div>
-
-<div class="text-center mb-32 relative z-20">
-    <h1 class="text-7xl font-black tracking-tighter uppercase mb-8">
-        <span class="text-zinc-700">Storage</span><br>
-        <span class="bg-gradient-to-r from-white to-zinc-500 bg-clip-text text-transparent">Orbital Buffer</span>
+<div class="max-w-4xl mx-auto text-center mb-24">
+    <h1 class="text-6xl font-extrabold tracking-tight text-slate-900 mb-6">
+        <?= __('nav_catalog') ?>
     </h1>
-    <div class="flex justify-center items-center gap-6">
-        <div class="h-[1px] w-20 bg-orange-600/30"></div>
-        <p class="text-orange-500 text-[10px] uppercase tracking-[0.8em] font-black">Secure Matrix Interface</p>
-        <div class="h-[1px] w-20 bg-orange-600/30"></div>
-    </div>
+    <p class="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
+        Откройте для себя нашу эксклюзивную коллекцию орбитальных активов, разработанную для самых требовательных секторов.
+    </p>
 </div>
 
-<div class="flex flex-wrap gap-8 items-center bg-[#0d0d0d]/80 backdrop-blur-xl border border-white/5 p-10 rounded-sm mb-32 relative z-20">
-    <div class="flex-grow max-w-2xl relative">
+<div class="luxury-card rounded-2xl p-8 mb-20 flex flex-wrap gap-8 items-center bg-white">
+    <div class="flex-grow max-w-xl relative">
         <input type="text" id="catalogSearch" placeholder="<?= __('search_placeholder') ?>" 
-               class="w-full bg-black border border-white/10 text-white px-8 py-5 text-[10px] font-bold uppercase tracking-[0.4em] outline-none focus:border-orange-600/50 transition-all">
+               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-6 py-4 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all">
     </div>
-    <div class="flex gap-6">
-        <input type="number" id="priceMin" placeholder="MIN" 
-               class="w-32 bg-black border border-white/10 text-white px-6 py-5 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-orange-600/50 transition-all">
-        <input type="number" id="priceMax" placeholder="MAX" 
-               class="w-32 bg-black border border-white/10 text-white px-6 py-5 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-orange-600/50 transition-all">
+    <div class="flex gap-4">
+        <input type="number" id="priceMin" placeholder="МИН" 
+               class="w-28 bg-slate-50 border border-slate-200 rounded-xl px-4 py-4 text-sm font-medium outline-none">
+        <input type="number" id="priceMax" placeholder="МАКС" 
+               class="w-28 bg-slate-50 border border-slate-200 rounded-xl px-4 py-4 text-sm font-medium outline-none">
     </div>
 </div>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 relative z-20" id="productGrid">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10" id="productGrid">
     <?php foreach ($products as $i => $product): ?>
-        <?php 
-            $lang = $_SESSION['lang'] ?? 'ru';
-
-            // Безопасное получение названия
-            $title_ru = $product['title_ru'] ?? $product['title'] ?? 'Без названия';
-            $title_en = $product['title_en'] ?? '';
-            $current_title = ($lang === 'en' && !empty($title_en)) ? $title_en : $title_ru;
-
-            // Безопасное получение описания
-            $desc_ru = $product['description_ru'] ?? $product['description'] ?? '';
-            $desc_en = $product['description_en'] ?? '';
-            $current_desc = ($lang === 'en' && !empty($desc_en)) ? $desc_en : $desc_ru;
-        ?>
-        <div class="product-card group relative flex flex-col bg-[#1a1a1a] border border-white/20 hover:border-orange-500/50 transition-all duration-700 p-6 hover:shadow-[0_0_50px_rgba(234,88,12,0.15)]" 
-             style="animation: fadeUp 1s ease-out forwards; animation-delay: <?= 0.05 * $i ?>s; opacity: 0;"
-             data-title="<?= strtolower(htmlspecialchars($current_title)) ?>" 
+        <div class="luxury-card group rounded-2xl flex flex-col p-5 bg-white overflow-hidden" 
+             data-title="<?= strtolower(htmlspecialchars($product['title_ru'])) ?>" 
              data-price="<?= (float)$product['price'] ?>">
             
-            <a href="?page=product&id=<?= $product['id'] ?>" class="block aspect-square overflow-hidden bg-black mb-8 relative border border-white/10">
+            <a href="/?page=product&id=<?= $product['id'] ?>" class="block aspect-square overflow-hidden rounded-xl bg-slate-100 mb-6">
                 <img src="<?= htmlspecialchars($product['image_url'] ?: 'https://via.placeholder.com/600x600') ?>" 
-                     alt="<?= htmlspecialchars($current_title) ?>" 
-                     class="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-110">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                     alt="<?= htmlspecialchars($product['title_ru']) ?>" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
             </a>
             
-            <div class="flex-grow flex flex-col">
-                <a href="?page=product&id=<?= $product['id'] ?>" class="block">
-                    <h3 class="text-xl font-bold text-white group-hover:text-orange-500 transition-colors mb-3 uppercase tracking-tight">
-                        <?= htmlspecialchars($current_title) ?>
+            <div class="flex-grow flex flex-col px-2">
+                <a href="/?page=product&id=<?= $product['id'] ?>">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                        <?= htmlspecialchars($product['title_ru']) ?>
                     </h3>
                 </a>
                 
-                <p class="text-xs text-zinc-400 line-clamp-3 mb-8 leading-relaxed">
-                    <?= htmlspecialchars($current_desc) ?>
+                <p class="text-slate-500 text-xs line-clamp-2 mb-6 leading-relaxed">
+                    <?= htmlspecialchars($product['description_ru'] ?: 'Описание отсутствует') ?>
                 </p>
 
-                <div class="mt-auto flex items-end justify-between border-t border-white/5 pt-6">
+                <div class="mt-auto flex items-center justify-between pt-5 border-t border-slate-100">
                     <div class="flex flex-col">
-                        <span class="text-[9px] text-zinc-600 uppercase tracking-widest font-black mb-1">ЦЕНА</span>
-                        <span class="text-2xl font-black text-white tracking-tighter"><?= number_format($product['price'], 0, '.', ' ') ?> <span class="text-orange-600"><?= __('currency') ?></span></span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1"><?= __('valuation') ?></span>
+                        <span class="text-xl font-extrabold text-slate-900"><?= number_format($product['price'], 0, '.', ' ') ?> <span class="text-indigo-600"><?= __('currency') ?></span></span>
                     </div>
                     <a href="actions/cart.php?action=add&id=<?= $product['id'] ?>" 
-                            class="bg-orange-600 text-white text-[9px] font-black uppercase tracking-[0.3em] py-4 px-8 hover:bg-white hover:text-black transition-all active:scale-95 text-center">
-                        Корзина 
+                            class="bg-indigo-600 text-white p-3 rounded-xl hover:bg-slate-900 transition-all active:scale-95 shadow-md shadow-indigo-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
                     </a>
                 </div>
             </div>
@@ -92,7 +69,7 @@ $products = $stmt->fetchAll();
 const catalogSearch = document.getElementById('catalogSearch');
 const priceMin = document.getElementById('priceMin');
 const priceMax = document.getElementById('priceMax');
-const cards = document.querySelectorAll('.product-card');
+const cards = document.querySelectorAll('.luxury-card[data-title]');
 
 function filterProducts() {
     const query = catalogSearch.value.toLowerCase();

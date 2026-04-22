@@ -1,11 +1,13 @@
 <?php
+session_start();
 require_once __DIR__ . '/../config.php';
 
 $page = $_GET['page'] ?? 'catalog';
 $is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'];
 
-if (str_starts_with($page, 'admin_') && !$is_admin && $page !== 'admin_login') {
-    header('Location: ?page=admin_login');
+// Admin Guard: Ensure login page is accessible but others are protected
+if (str_starts_with($page, 'admin_') && $page !== 'admin_login' && !$is_admin) {
+    header('Location: /?page=admin_login');
     exit;
 }
 
