@@ -1,14 +1,17 @@
 <?php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'products_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+// Supabase PostgreSQL Configuration
+$host = 'aws-1-ap-northeast-1.pooler.supabase.com';
+$port = '6543';
+$db   = 'postgres';
+$user = 'postgres.gjethtscgyafrypdvfes';
+$pass = 'asdasdasdasdasdasdsadasdasdasdasdasdsa'; // TODO: Replace with actual password
 
 define('ADMIN_USER', 'admin');
 define('ADMIN_PASS', 'password123');
 
 try {
-    $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4", DB_USER, DB_PASS, [
+    $dsn = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
+    $pdo = new PDO($dsn, $user, $pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ]);
