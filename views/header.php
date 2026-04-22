@@ -1,59 +1,51 @@
-<!-- VERSION 2.1-DEBUG -->
 <?php
-if (session_status() === PHP_SESSION_NONE) { session_start(); }
-$is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
-             (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
+// FORCE_VERSION_4_LIGHT
+$is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
+
+// Инициализация перевода (RU)
+$lang_file = __DIR__ . "/../languages/ru.php";
+$trans = file_exists($lang_file) ? require $lang_file : [];
+if (!function_exists('__')) {
+    function __($key) {
+        global $trans;
+        return $trans[$key] ?? $key;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Орбитальная Система | Luxury Light</title>
+    <title>Orbital System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #0F172A; min-height: 100vh; }
-        .luxury-card { background: white; border: 1px solid #E2E8F0; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); transition: all 0.3s ease; }
-        .luxury-card:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
-        ::selection { background: #4F46E5; color: #ffffff; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="antialiased bg-slate-50 text-slate-900">
+<body class="bg-slate-50 text-slate-900">
 
-<?php if (isset($_GET['debug_auth'])): ?>
-    <div style="background:red; color:white; padding:10px; position:fixed; bottom:0; left:0; z-index:9999;">
-        Admin Status: <?= $is_admin ? 'TRUE' : 'FALSE' ?> | 
-        Sess: <?= isset($_SESSION['admin_logged_in']) ? 'YES' : 'NO' ?> | 
-        Cookie: <?= isset($_COOKIE['admin_access']) ? 'YES' : 'NO' ?>
-    </div>
-<?php endif; ?>
+<nav class="bg-white border-b border-slate-200 py-4 px-10 flex justify-between items-center sticky top-0 z-50 shadow-sm">
+    <a href="/" class="font-black text-xl tracking-tighter flex items-center gap-2 italic">
+        <span class="w-8 h-8 bg-indigo-600 rounded text-white flex items-center justify-center font-black not-italic">O</span>
+        ORBITAL SYSTEM
+    </a>
+    <div class="flex items-center gap-6">
+        <a href="?page=catalog" class="text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-indigo-600 transition-colors">Каталог</a>
+        
+        <?php if ($is_admin): ?>
+            <a href="?page=admin_products" class="text-xs font-bold uppercase tracking-widest text-indigo-600 border-b-2 border-indigo-600">Товары</a>
+            <a href="?page=admin_orders" class="text-xs font-bold uppercase tracking-widest text-indigo-600">Заказы</a>
+            <a href="?logout=1" class="text-xs font-bold uppercase tracking-widest text-red-500 font-black ml-4">Выход</a>
+        <?php else: ?>
+            <a href="?page=admin_login" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-600 border-l border-slate-200 pl-6">Вход</a>
+        <?php endif; ?>
 
-<nav class="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-        <a href="/" class="text-xl font-extrabold tracking-tight flex items-center gap-2">
-            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-lg font-black italic">O</div>
-            ORBITAL<span class="text-indigo-600 uppercase">System</span>
+        <a href="?page=cart" class="bg-slate-900 text-white px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-md">
+            Корзина (<?= array_sum($_SESSION['cart'] ?? []) ?>)
         </a>
-
-        <div class="flex items-center gap-8">
-            <a href="?page=catalog" class="text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-indigo-600 transition-colors">КАТАЛОГ</a>
-
-            <?php if ($is_admin === true): ?>
-                <!-- ADMIN MENU VIEWABLE ONLY IF IS_ADMIN IS TRUE -->
-                <a href="?page=admin_products" class="text-xs font-bold uppercase tracking-widest text-indigo-600 border-b-2 border-indigo-600">ТОВАРЫ</a>
-                <a href="?page=admin_orders" class="text-xs font-bold uppercase tracking-widest text-indigo-600">ЗАКАЗЫ</a>
-                <a href="?logout=1" class="text-xs font-bold uppercase tracking-widest text-red-500 font-black ml-4">ВЫХОД [X]</a>
-            <?php else: ?>
-                <!-- GUEST MENU -->
-                <a href="?page=admin_login" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-600 border-l border-slate-200 pl-8">ВХОД</a>
-            <?php endif; ?>
-
-            <a href="?page=cart" class="bg-slate-900 text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all">
-                КОРЗИНА (<?= array_sum($_SESSION['cart'] ?? []) ?>)
-            </a>
-        </div>
     </div>
 </nav>
 
-<main class="container mx-auto px-6 pt-12 pb-24">
+<main class="max-w-7xl mx-auto p-10 min-h-screen">

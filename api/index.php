@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+// 1. Force Define Admin Status immediately
+$is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
+            (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
+
+// 2. Logout Handler
 if (isset($_GET['logout'])) {
     session_destroy();
     setcookie('admin_access', '', time() - 3600, '/');
@@ -12,11 +17,7 @@ require_once __DIR__ . '/../config.php';
 
 $page = $_GET['page'] ?? 'catalog';
 
-// Dual-layer Admin check (Session + persistent cookie)
-$is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
-            (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
-
-// Admin Guard
+// 3. Admin Guard
 if (str_starts_with($page, 'admin_') && $page !== 'admin_login' && !$is_admin) {
     header('Location: /?page=admin_login');
     exit;
