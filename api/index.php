@@ -1,9 +1,7 @@
 <?php 
 session_start(); 
-error_reporting(E_ALL); 
-ini_set('display_errors', 1);
 
-// FORCE_VERSION_5_LOGIC
+// 1. Capture Admin Status immediately
 $is_admin = (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) || 
              (isset($_COOKIE['admin_access']) && $_COOKIE['admin_access'] === 'active_session_verified');
 

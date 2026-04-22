@@ -7,7 +7,7 @@ $user = 'postgres.gjethtscgyafrypdvfes';
 $pass = 'asdasdasdasdasdasdsadasdasdasdasdasdsa'; // TODO: Replace with actual password
 
 define('ADMIN_USER', 'admin');
-define('ADMIN_PASS', 'password123');
+define('ADMIN_PASS', '12345');
 
 try {
     $dsn = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
