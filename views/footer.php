@@ -1,75 +1,25 @@
 </main>
 
-<!-- Cart Modal Overlay -->
-<div id="cartOverlay" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md hidden z-[60] transition-opacity duration-500"></div>
-
-<!-- Cart Modal -->
-<div id="cartModal" class="fixed top-0 right-0 w-full max-w-md h-full bg-slate-900 shadow-2xl z-[70] transform translate-x-full transition-transform duration-500 ease-in-out flex flex-col border-l border-white/10">
-    <div class="p-8 border-b border-white/5 flex justify-between items-center bg-slate-950/50">
-        <div class="flex flex-col">
-            <h2 class="text-xl font-extrabold text-white tracking-tighter uppercase"><?= __('inventory') ?></h2>
-            <span class="text-[10px] text-cyan-400 font-extrabold tracking-[0.4em] uppercase"><?= __('sector_cart_registry') ?></span>
-        </div>
-        <button id="closeCart" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 text-slate-500 hover:text-white transition-all text-2xl font-light">&times;</button>
-    </div>
-    
-    <div id="cartItems" class="flex-grow overflow-y-auto p-8 space-y-6 scrollbar-thin scrollbar-thumb-cyan-500/20">
-        <!-- Rendered via JS -->
-    </div>
-    
-    <div class="p-8 border-t border-white/5 bg-slate-950/80 backdrop-blur-2xl">
-        <div class="flex justify-between items-center mb-8 p-6 rounded-2xl bg-white/5 border border-white/10 shadow-lg">
-            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-500"><?= __('total_valuation') ?></span>
-            <span id="cartTotal" class="text-3xl font-extrabold text-white tracking-tighter">0 <span class="text-cyan-400 text-sm">฿</span></span>
+<footer class="bg-white border-t border-slate-200 py-16 mt-20">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-8">
+        <div>
+            <div class="font-bold text-xl tracking-tight text-slate-900 flex items-center gap-2 justify-center md:justify-start">
+                <span class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black italic">S</span>
+                <span class="uppercase tracking-widest text-sm font-extrabold">Orbital<span class="text-indigo-600">Store</span></span>
+            </div>
+            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] mt-4">Premium Assets Distribution Network</p>
         </div>
         
-        <form id="checkoutForm" class="space-y-4">
-            <div class="space-y-1">
-                <input type="text" name="customer_name" placeholder="<?= __('consignee_id') ?>" required 
-                       class="w-full bg-slate-950 border border-white/10 text-white px-6 py-4 text-xs font-bold uppercase tracking-widest rounded-xl outline-none focus:border-cyan-500 transition-all placeholder:text-slate-700">
-            </div>
-            
-            <div class="space-y-1">
-                <input type="tel" name="customer_phone" id="phoneInput" placeholder="+7 (999) 000-00-00" required maxlength="18"
-                       class="w-full bg-slate-950 border border-white/10 text-white px-6 py-4 text-xs font-bold uppercase tracking-widest rounded-xl outline-none focus:border-cyan-500 transition-all placeholder:text-slate-700">
-            </div>
-            
-            <div class="space-y-1">
-                <input type="text" name="customer_address" placeholder="<?= __('deployment_coords') ?>" required 
-                       class="w-full bg-slate-950 border border-white/10 text-white px-6 py-4 text-xs font-bold uppercase tracking-widest rounded-xl outline-none focus:border-cyan-500 transition-all placeholder:text-slate-700">
-            </div>
-            
-            <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-fuchsia-600 text-white font-bold uppercase tracking-[0.3em] text-[11px] py-5 rounded-xl hover:scale-[1.02] shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all active:scale-[0.98] mt-4">
-                <?= __('initiate_transaction') ?>
-            </button>
-        </form>
-    </div>
-</div>
+        <div class="flex flex-wrap justify-center gap-8">
+            <a href="?page=catalog" class="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-colors">Каталог</a>
+            <a href="?page=cart" class="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-colors">Корзина</a>
+            <a href="?page=admin_login" class="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-colors">Вход</a>
+        </div>
 
-<footer class="bg-slate-950 border-t border-white/5 py-16 mt-12">
-    <div class="container mx-auto px-6 text-center">
-        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.4em]">&copy; 2026 ORBITAL SYSTEM. ALL SYSTEMS OPERATIONAL.</p>
+        <p class="text-slate-400 text-[9px] font-bold uppercase tracking-[0.3em]">&copy; 2026 ORBITAL SYSTEM. ALL RIGHTS RESERVED.</p>
     </div>
 </footer>
 
 <script src="public/app.js"></script>
-<script>
-// Phone formatting logic remains same
-const phoneInput = document.getElementById('phoneInput');
-if (phoneInput) {
-    phoneInput.addEventListener('focus', () => { if (!phoneInput.value) phoneInput.value = '+7 '; });
-    phoneInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 0 && value[0] === '7') value = value.substring(1);
-        if (value.length > 0 && value[0] === '8') value = value.substring(1);
-        let formatted = '+7 ';
-        if (value.length > 0) formatted += '(' + value.substring(0, 3);
-        if (value.length > 3) formatted += ') ' + value.substring(3, 6);
-        if (value.length > 6) formatted += '-' + value.substring(6, 8);
-        if (value.length > 8) formatted += '-' + value.substring(8, 10);
-        e.target.value = formatted.substring(0, 18);
-    });
-}
-</script>
 </body>
 </html>
