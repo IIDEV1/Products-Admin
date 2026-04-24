@@ -14,28 +14,40 @@ if (!$product) {
     exit;
 }
 
-$current_title = $product['title_ru'] ?? $product['title'] ?? 'Без названия';
-$current_desc = $product['description_ru'] ?? $product['description'] ?? 'Описание отсутствует';
+$current_title = $product['title_ru'] ?? $product['name'] ?? __('no_title');
+$current_desc = $product['description_ru'] ?? $product['description'] ?? __('no_description');
+
+// Update page title
+$page_title = page_title('product', $current_title);
 ?>
+
+<div class="breadcrumbs">
+    <a href="/"><?= __('nav_home') ?></a>
+    <span class="separator">›</span>
+    <a href="/?page=catalog"><?= __('nav_catalog') ?></a>
+    <span class="separator">›</span>
+    <span class="current"><?= htmlspecialchars($current_title) ?></span>
+</div>
 
 <div class="max-w-6xl mx-auto">
     <div class="luxury-card rounded-3xl overflow-hidden flex flex-col md:flex-row bg-white">
         <div class="md:w-1/2 aspect-square bg-slate-50">
-            <img src="<?= htmlspecialchars($product['image_url'] ?: 'https://via.placeholder.com/800') ?>" 
+            <img src="<?= htmlspecialchars($product['image_url'] ?: '/public/placeholder.svg') ?>" 
                  alt="<?= htmlspecialchars($current_title) ?>" 
-                 class="w-full h-full object-cover">
+                 class="w-full h-full object-cover"
+                 loading="lazy">
         </div>
 
-        <div class="md:w-1/2 p-12 flex flex-col">
+        <div class="md:w-1/2 p-6 md:p-12 flex flex-col">
             <div class="mb-10">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
                     <span class="text-[10px] text-slate-400 font-extrabold uppercase tracking-[0.4em]"><?= __('asset_spec') ?></span>
                 </div>
-                <h1 class="text-4xl font-extrabold text-slate-900 uppercase tracking-tight leading-tight mb-6"><?= htmlspecialchars($current_title) ?></h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 uppercase tracking-tight leading-tight mb-6"><?= htmlspecialchars($current_title) ?></h1>
                 <div class="inline-flex items-baseline gap-2">
                     <span class="text-4xl font-extrabold text-indigo-600 tracking-tighter"><?= number_format($product['price'], 0, '.', ' ') ?></span>
-                    <span class="text-lg font-bold text-slate-400 uppercase tracking-widest italic">฿</span>
+                    <span class="text-lg font-bold text-slate-400 uppercase tracking-widest">₽</span>
                 </div>
             </div>
 
@@ -47,8 +59,9 @@ $current_desc = $product['description_ru'] ?? $product['description'] ?? 'Опи
             </div>
 
             <div class="mt-12">
-                <a href="actions/cart.php?action=add&id=<?= $product['id'] ?>" 
-                   class="btn-luxury w-full flex items-center justify-center gap-4 py-5 rounded-2xl text-xs font-bold uppercase tracking-widest shadow-xl shadow-slate-200">
+                <a href="/?action=add&id=<?= $product['id'] ?>" 
+                   class="add-to-cart-btn btn-luxury w-full flex items-center justify-center gap-4 py-5 rounded-2xl text-xs font-bold uppercase tracking-widest shadow-xl shadow-slate-200"
+                   data-id="<?= $product['id'] ?>">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
@@ -62,6 +75,5 @@ $current_desc = $product['description_ru'] ?? $product['description'] ?? 'Опи
         <a href="/?page=catalog" class="text-xs font-bold text-slate-400 hover:text-indigo-600 transition-colors flex items-center gap-3">
             <span>←</span> <?= __('return_to_registry') ?>
         </a>
-        <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest"><?= __('sector') ?>: 07-B</span>
     </div>
 </div>

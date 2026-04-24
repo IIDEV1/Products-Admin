@@ -12,6 +12,12 @@ if (!empty($cart)) {
 }
 ?>
 
+<div class="breadcrumbs">
+    <a href="/"><?= __('nav_home') ?></a>
+    <span class="separator">›</span>
+    <span class="current"><?= __('nav_cart') ?></span>
+</div>
+
 <div class="max-w-7xl mx-auto">
     <div class="mb-12">
         <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight uppercase"><?= __('inventory') ?></h1>
@@ -36,11 +42,11 @@ if (!empty($cart)) {
                     $qty = $cart[$p['id']] ?? 0;
                     $itemTotal = $p['price'] * $qty;
                     $subtotal += $itemTotal;
-                    $display_title = $p['title_ru'] ?? $p['title'] ?? 'Без названия';
+                    $display_title = $p['title_ru'] ?? $p['name'] ?? __('no_title');
                 ?>
-                    <div class="bg-white rounded-2xl p-4 md:p-6 flex flex-col sm:flex-row items-center gap-6 border border-slate-200 shadow-sm transition-hover hover:shadow-md">
+                    <div class="bg-white rounded-2xl p-4 md:p-6 flex flex-col sm:flex-row items-center gap-6 border border-slate-200 shadow-sm hover:shadow-md transition-all">
                         <div class="w-full sm:w-32 aspect-square rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-slate-100">
-                            <img src="<?= htmlspecialchars($p['image_url'] ?: 'https://via.placeholder.com/300') ?>" class="w-full h-full object-cover">
+                            <img src="<?= htmlspecialchars($p['image_url'] ?: '/public/placeholder.svg') ?>" class="w-full h-full object-cover" loading="lazy">
                         </div>
 
                         <div class="flex-grow text-center sm:text-left">
@@ -48,22 +54,25 @@ if (!empty($cart)) {
                             <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-10">
                                 <div class="flex flex-col">
                                     <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1"><?= __('valuation') ?></span>
-                                    <span class="text-slate-900 font-extrabold text-lg"><?= number_format($p['price'], 0, '.', ' ') ?> ฿</span>
+                                    <span class="text-slate-900 font-extrabold text-lg"><?= number_format($p['price'], 0, '.', ' ') ?> ₽</span>
                                 </div>
                                 <div class="flex flex-col items-center sm:items-start">
                                     <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1"><?= __('quantity') ?></span>
-                                    <div class="flex items-center gap-4 bg-slate-50 border border-slate-200 px-3 py-1 rounded-lg">
-                                        <a href="/?action=remove&id=<?= $p['id'] ?>" class="text-slate-400 hover:text-indigo-600 transition-colors font-black">-</a>
-                                        <span class="text-slate-900 font-extrabold text-sm"><?= $qty ?></span>
-                                        <a href="/?action=add&id=<?= $p['id'] ?>" class="text-slate-400 hover:text-indigo-600 transition-colors font-black">+</a>
+                                    <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg">
+                                        <a href="/?action=remove&id=<?= $p['id'] ?>" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all font-black text-lg">−</a>
+                                        <span class="text-slate-900 font-extrabold text-sm w-8 text-center"><?= $qty ?></span>
+                                        <a href="/?action=add&id=<?= $p['id'] ?>" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all font-black text-lg">+</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="w-full sm:w-auto text-center sm:text-right sm:pr-4 pt-4 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex sm:flex-col justify-between items-center sm:block">
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1"><?= __('total_sector_value') ?></span>
-                            <span class="text-xl font-extrabold text-slate-900"><?= number_format($itemTotal, 0, '.', ' ') ?> ฿</span>
+                        <div class="w-full sm:w-auto text-center sm:text-right pt-4 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex sm:flex-col justify-between items-center sm:items-end gap-2">
+                            <div>
+                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1"><?= __('total_sector_value') ?></span>
+                                <span class="text-xl font-extrabold text-slate-900"><?= number_format($itemTotal, 0, '.', ' ') ?> ₽</span>
+                            </div>
+                            <a href="/?action=delete_item&id=<?= $p['id'] ?>" class="text-[9px] font-bold text-red-400 hover:text-red-600 uppercase tracking-widest transition-colors mt-2"><?= __('remove_item') ?></a>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -76,7 +85,7 @@ if (!empty($cart)) {
                     <div class="space-y-4 mb-8">
                         <div class="flex justify-between items-center">
                             <span class="text-slate-500 text-[10px] font-bold uppercase tracking-widest"><?= __('asset_valuation') ?></span>
-                            <span class="text-slate-900 font-bold"><?= number_format($subtotal, 0, '.', ' ') ?> ฿</span>
+                            <span class="text-slate-900 font-bold"><?= number_format($subtotal, 0, '.', ' ') ?> ₽</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-slate-500 text-[10px] font-bold uppercase tracking-widest"><?= __('logistics') ?></span>
@@ -85,26 +94,27 @@ if (!empty($cart)) {
                         <div class="h-px bg-slate-100 my-6"></div>
                         <div class="flex justify-between items-end">
                             <span class="text-slate-900 text-sm font-extrabold uppercase tracking-tight"><?= __('total_manifest_value') ?></span>
-                            <span class="text-3xl font-extrabold text-indigo-600 tracking-tighter"><?= number_format($subtotal, 0, '.', ' ') ?> ฿</span>
+                            <span class="text-3xl font-extrabold text-indigo-600 tracking-tighter"><?= number_format($subtotal, 0, '.', ' ') ?> ₽</span>
                         </div>
                     </div>
 
                     <form action="/?action=checkout" method="POST" class="space-y-4">
+                        <?= csrf_field() ?>
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Имя получателя</label>
-                            <input type="text" name="customer_name" placeholder="<?= __('consignee_id') ?>" required 
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1"><?= __('label_name') ?></label>
+                            <input type="text" name="customer_name" placeholder="<?= __('consignee_id') ?>" required minlength="2"
                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-sm font-semibold outline-none focus:border-indigo-600 transition-all">
                         </div>
                         
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Телефон</label>
-                            <input type="tel" name="customer_phone" placeholder="<?= __('secure_comms') ?>" required 
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1"><?= __('label_phone') ?></label>
+                            <input type="tel" name="customer_phone" placeholder="<?= __('secure_comms') ?>" required pattern="[\d\s\+\-\(\)]{7,20}"
                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-sm font-semibold outline-none focus:border-indigo-600 transition-all">
                         </div>
                         
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Адрес доставки</label>
-                            <textarea name="customer_address" placeholder="<?= __('deployment_coords') ?>" required rows="3"
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1"><?= __('label_address') ?></label>
+                            <textarea name="customer_address" placeholder="<?= __('deployment_coords') ?>" required rows="3" minlength="5"
                                       class="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-sm font-semibold outline-none focus:border-indigo-600 transition-all resize-none"></textarea>
                         </div>
 

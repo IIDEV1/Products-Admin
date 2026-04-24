@@ -1,3 +1,9 @@
+<div class="breadcrumbs">
+    <a href="/"><?= __('nav_home') ?></a>
+    <span class="separator">›</span>
+    <span class="current"><?= __('nav_admin') ?></span>
+</div>
+
 <div class="min-h-[70vh] flex flex-col items-center justify-center p-4">
     <div class="w-full max-w-md bg-white rounded-3xl p-8 md:p-12 border border-slate-200 shadow-xl">
         <div class="mb-10 text-center">
@@ -11,6 +17,7 @@
         </div>
         
         <form action="/?action=login" method="POST" class="space-y-6">
+            <?= csrf_field() ?>
             <div class="space-y-1">
                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] ml-1"><?= __('username') ?></label>
                 <input type="text" name="username" required 

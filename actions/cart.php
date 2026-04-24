@@ -1,6 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) { session_start(); }
-require_once __DIR__ . '/../config.php';
+// Called from api/index.php — session & config already loaded
 
 $action = $_GET['action'] ?? '';
 $id = (int)($_GET['id'] ?? 0);
@@ -15,7 +14,7 @@ if ($action === 'get') {
     if (!empty($_SESSION['cart'])) {
         $ids = array_keys($_SESSION['cart']);
         $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-        $stmt = $pdo->prepare("SELECT id, title_ru as title, price FROM products WHERE id IN ($placeholders)");
+        $stmt = $pdo->prepare("SELECT id, COALESCE(title_ru, name) as title, price FROM products WHERE id IN ($placeholders)");
         $stmt->execute($ids);
         $products = $stmt->fetchAll();
         foreach ($products as $p) {
@@ -28,7 +27,23 @@ if ($action === 'get') {
         }
     }
     header('Content-Type: application/json');
-    echo json_encode(['items' => $items]);
+    echo json_encode(['items' => $items, 'count' => array_sum($_SESSION['cart'])]);
+    exit;
+}
+
+// Delete entire item from cart
+if ($action === 'delete_item' && $id > 0) {
+    $id_key = (string)$id;
+    unset($_SESSION['cart'][$id_key]);
+    setcookie('cart_storage', json_encode($_SESSION['cart']), time() + 86400 * 30, '/');
+    session_write_close();
+    
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => true, 'count' => array_sum($_SESSION['cart'])]);
+        exit;
+    }
+    header('Location: /?page=cart');
     exit;
 }
 
@@ -53,10 +68,25 @@ if ($id > 0) {
     }
 }
 
-// Записываем куки на 30 дней для Vercel
+// Save cookie for Vercel
 setcookie('cart_storage', json_encode($_SESSION['cart']), time() + 86400 * 30, '/');
-
 session_write_close();
+
+// AJAX response
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true, 'count' => array_sum($_SESSION['cart'])]);
+    exit;
+}
+
+// Validate referer for redirect
 $referer = $_SERVER['HTTP_REFERER'] ?? '/?page=catalog';
+$parsed = parse_url($referer);
+$host = $parsed['host'] ?? '';
+$serverHost = $_SERVER['HTTP_HOST'] ?? '';
+if ($host && $host !== $serverHost) {
+    $referer = '/?page=catalog';
+}
+
 header("Location: $referer");
 exit;
