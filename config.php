@@ -12,11 +12,22 @@ if (file_exists($envFile)) {
 }
 
 // Database credentials from environment
-$host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: 'aws-1-ap-northeast-1.pooler.supabase.com';
-$port = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?: '6543';
-$db   = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'postgres';
-$user = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'postgres.gjethtscgyafrypdvfes';
-$pass = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: '';
+$db_url = $_ENV['DATABASE_URL'] ?? getenv('DATABASE_URL') ?: ($_ENV['POSTGRES_URL'] ?? getenv('POSTGRES_URL') ?: '');
+
+if ($db_url) {
+    $parsedUrl = parse_url($db_url);
+    $host = $parsedUrl['host'] ?? '';
+    $port = $parsedUrl['port'] ?? '5432';
+    $user = $parsedUrl['user'] ?? '';
+    $pass = $parsedUrl['pass'] ?? '';
+    $db   = ltrim($parsedUrl['path'] ?? '', '/');
+} else {
+    $host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: 'aws-1-ap-northeast-1.pooler.supabase.com';
+    $port = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?: '6543';
+    $db   = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'postgres';
+    $user = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'postgres.gjethtscgyafrypdvfes';
+    $pass = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: '';
+}
 
 // Admin credentials
 define('ADMIN_USER', $_ENV['ADMIN_USER'] ?? getenv('ADMIN_USER') ?: 'admin');
