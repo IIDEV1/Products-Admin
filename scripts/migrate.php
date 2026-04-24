@@ -18,6 +18,7 @@ $migrations = [
     "ALTER TABLE products ADD COLUMN IF NOT EXISTS description_en TEXT",
     "ALTER TABLE products ADD COLUMN IF NOT EXISTS category_id INTEGER",
     "ALTER TABLE products ADD COLUMN IF NOT EXISTS stock INTEGER DEFAULT 0",
+    "ALTER TABLE orders ADD COLUMN IF NOT EXISTS total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0",
     "CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status)",
     "CREATE INDEX IF NOT EXISTS idx_orders_created ON orders(created_at DESC)",
     "CREATE INDEX IF NOT EXISTS idx_order_items_order ON order_items(order_id)",

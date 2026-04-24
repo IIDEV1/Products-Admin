@@ -31,6 +31,8 @@ if ($action !== '') {
         require_once __DIR__ . '/../actions/checkout.php';
     } elseif ($action === 'lang') {
         require_once __DIR__ . '/../actions/lang.php';
+    } elseif ($action === 'migrate') {
+        require_once __DIR__ . '/../scripts/migrate.php';
     } else {
         require_once __DIR__ . '/../actions/admin.php';
     }
