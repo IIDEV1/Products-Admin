@@ -26,7 +26,7 @@ if ($db_url) {
     $port = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?: '6543';
     $db   = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'postgres';
     $user = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'postgres.gjethtscgyafrypdvfes';
-    $pass = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: '';
+    $pass = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: 'asdasdasdasdasdasdsadasdasdasdasdasdsa';
 }
 
 // Admin credentials
